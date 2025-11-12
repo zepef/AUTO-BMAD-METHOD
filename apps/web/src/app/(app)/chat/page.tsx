@@ -5,8 +5,7 @@ import { ChatContainer } from "@/components/chat/chat-container";
 import { AgentSelector } from "@/components/chat/agent-selector";
 import { type Message, type Agent } from "@/types/chat";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { Home, Settings } from "lucide-react";
+import { Separator } from "@/components/ui/separator";
 
 const MOCK_AGENTS: Agent[] = [
   {
@@ -46,15 +45,12 @@ const MOCK_RESPONSES: Record<string, string[]> = {
   ],
   architect: [
     "Let me help you design the technical architecture for this system.\n\n## System Architecture Overview\n\n```typescript\n// High-level architecture\ninterface SystemArchitecture {\n  frontend: 'Next.js 14 + React 18 + TypeScript';\n  backend: 'Node.js + Fastify + tRPC';\n  database: 'PostgreSQL + Prisma ORM';\n  caching: 'Redis';\n  deployment: 'Vercel (frontend) + Railway (backend)';\n}\n```\n\n### Key Design Decisions\n\n1. **Monorepo Structure** - Using Turborepo for better code organization\n2. **Type Safety** - End-to-end TypeScript with tRPC\n3. **Scalability** - Horizontal scaling with load balancing\n4. **Security** - JWT authentication, CORS, rate limiting\n\nShall we dive deeper into any specific component?",
-    "Here's the data flow architecture:\n\n```mermaid\ngraph LR\n    A[Client] --> B[API Gateway]\n    B --> C[Auth Service]\n    B --> D[Core API]\n    D --> E[Database]\n    D --> F[Cache]\n```\n\nThis ensures:\n- **Performance**: Caching layer reduces database load\n- **Security**: Authentication at gateway level\n- **Maintainability**: Clear separation of concerns",
   ],
   developer: [
     "I can help you implement that feature! Here's a sample implementation:\n\n```typescript\nimport { useState, useEffect } from 'react';\n\nexport function useDataFetcher<T>(url: string) {\n  const [data, setData] = useState<T | null>(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState<Error | null>(null);\n\n  useEffect(() => {\n    async function fetchData() {\n      try {\n        const response = await fetch(url);\n        if (!response.ok) throw new Error('Failed to fetch');\n        const json = await response.json();\n        setData(json);\n      } catch (err) {\n        setError(err as Error);\n      } finally {\n        setLoading(false);\n      }\n    }\n    fetchData();\n  }, [url]);\n\n  return { data, loading, error };\n}\n```\n\nThis hook provides:\n- Type safety with generics\n- Loading and error states\n- Automatic cleanup",
-    "Let me help you debug that issue.\n\n### Common Issues Checklist\n\n- [ ] Check if the API endpoint is correct\n- [ ] Verify authentication headers are included\n- [ ] Inspect network tab for actual request/response\n- [ ] Check CORS configuration\n- [ ] Validate data types match TypeScript interfaces\n\nCan you share the error message you're seeing?",
   ],
   designer: [
-    "Let me help you create an excellent user experience!\n\n## UX Design Principles\n\n### 1. **User-Centered Design**\n- Focus on user needs first\n- Conduct user research\n- Create user personas\n- Map user journeys\n\n### 2. **Visual Hierarchy**\n- Use size, color, and spacing effectively\n- Guide user attention to important elements\n- Maintain consistency throughout\n\n### 3. **Accessibility**\n- WCAG 2.1 AA compliance\n- Keyboard navigation\n- Screen reader support\n- Color contrast ratios\n\n### 4. **Responsive Design**\n- Mobile-first approach\n- Fluid layouts\n- Touch-friendly targets (44x44px minimum)\n\nWould you like me to create wireframes for your app?",
-    "Here's a color palette recommendation:\n\n### Primary Colors\n- **Primary**: `#6366f1` (Indigo) - Trust, professionalism\n- **Secondary**: `#10b981` (Emerald) - Success, growth\n- **Accent**: `#f59e0b` (Amber) - Energy, attention\n\n### Neutral Colors\n- **Background**: `#ffffff`\n- **Surface**: `#f8fafc`\n- **Text Primary**: `#0f172a`\n- **Text Secondary**: `#64748b`\n\nThis palette ensures good contrast and accessibility!",
+    "Let me help you create an excellent user experience!\n\n## UX Design Principles\n\n### 1. **User-Centered Design**\n- Focus on user needs first\n- Conduct user research\n- Create user personas\n- Map user journeys\n\n### 2. **Visual Hierarchy**\n- Use size, color, and spacing effectively\n- Guide user attention to important elements\n- Maintain consistency throughout\n\n### 3. **Accessibility**\n- WCAG 2.1 AA compliance\n- Keyboard navigation\n- Screen reader support\n- Color contrast ratios\n\nWould you like me to create wireframes for your app?",
   ],
 };
 
@@ -86,8 +82,7 @@ export default function ChatPage() {
         "I understand. Let me help you with that!",
       ];
       const currentIndex = responseIndex[selectedAgentId] || 0;
-      const response =
-        agentResponses[currentIndex % agentResponses.length];
+      const response = agentResponses[currentIndex % agentResponses.length];
 
       const agentMessage: Message = {
         id: `msg-${Date.now()}-agent`,
@@ -108,49 +103,35 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen flex-col bg-neutral-50">
-      {/* Header */}
-      <div className="border-b border-neutral-200 bg-white">
-        <div className="flex items-center justify-between px-4 py-3">
-          <div className="flex items-center gap-4">
-            <Link href="/">
-              <Button variant="ghost" size="icon">
-                <Home className="h-5 w-5" />
-              </Button>
-            </Link>
-            <div>
-              <h1 className="text-lg font-semibold text-neutral-900">
-                FlowForge Chat Demo
-              </h1>
-              <p className="text-sm text-neutral-600">
-                Chat with specialized AI agents
-              </p>
-            </div>
+    <div className="flex h-full flex-col bg-white">
+      {/* Chat Header */}
+      <div className="border-b border-neutral-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-semibold text-neutral-900">
+              AI Chat Workspace
+            </h2>
+            <p className="text-sm text-neutral-600">
+              Chat with specialized AI agents
+            </p>
           </div>
-          <div className="flex items-center gap-2">
-            <AgentSelector
-              agents={MOCK_AGENTS}
-              selectedAgentId={selectedAgentId}
-              onSelectAgent={setSelectedAgentId}
-            />
-            <Button variant="ghost" size="icon">
-              <Settings className="h-5 w-5" />
-            </Button>
-          </div>
+          <AgentSelector
+            agents={MOCK_AGENTS}
+            selectedAgentId={selectedAgentId}
+            onSelectAgent={setSelectedAgentId}
+          />
         </div>
       </div>
 
-      {/* Chat Area */}
+      {/* Chat Container */}
       <div className="flex-1 overflow-hidden">
-        <div className="h-full max-w-4xl mx-auto">
-          <ChatContainer
-            messages={messages}
-            onSendMessage={handleSendMessage}
-            isLoading={isLoading}
-            loadingAgentName={selectedAgent?.name}
-            loadingAgentColor={selectedAgent?.color}
-          />
-        </div>
+        <ChatContainer
+          messages={messages}
+          onSendMessage={handleSendMessage}
+          isLoading={isLoading}
+          loadingAgentName={selectedAgent?.name}
+          loadingAgentColor={selectedAgent?.color}
+        />
       </div>
     </div>
   );
