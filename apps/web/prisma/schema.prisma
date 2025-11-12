@@ -1,0 +1,97 @@
+// Prisma schema for FlowForge
+// Database: SQLite for development (easily switchable to PostgreSQL for production)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// User model
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  projects  Project[]
+  artifacts Artifact[]
+  messages  Message[]
+}
+
+// Project model
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  status      String   @default("active") // active, archived, completed
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId    String
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  artifacts Artifact[]
+  messages  Message[]
+
+  @@index([userId])
+}
+
+// Artifact model (PRDs, Architecture docs, User Stories, etc.)
+model Artifact {
+  id          String   @id @default(cuid())
+  type        String   // prd, architecture, story, epic, tech-spec, document
+  title       String
+  description String?
+  content     String   // Markdown content
+  status      String   @default("draft") // draft, in-progress, completed
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([type])
+  @@index([status])
+}
+
+// Chat message model
+model Message {
+  id        String   @id @default(cuid())
+  role      String   // user, agent, system
+  content   String
+  agentId   String?  // Which agent responded (pm, architect, developer, designer)
+  createdAt DateTime @default(now())
+
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project? @relation(fields: [projectId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@index([projectId])
+  @@index([createdAt])
+}
+
+// Agent configuration model (optional - for storing agent preferences)
+model AgentConfig {
+  id          String   @id @default(cuid())
+  agentId     String   @unique // pm, architect, developer, designer
+  provider    String   @default("openai") // openai, anthropic
+  model       String
+  temperature Float    @default(0.7)
+  enabled     Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
