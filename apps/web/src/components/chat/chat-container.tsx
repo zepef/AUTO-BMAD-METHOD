@@ -13,6 +13,8 @@ interface ChatContainerProps {
   loadingAgentName?: string;
   loadingAgentColor?: string;
   disabled?: boolean;
+  input?: string;
+  onInputChange?: (value: string) => void;
 }
 
 export function ChatContainer({
@@ -22,6 +24,8 @@ export function ChatContainer({
   loadingAgentName,
   loadingAgentColor,
   disabled = false,
+  input,
+  onInputChange,
 }: ChatContainerProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const scrollAreaRef = useRef<HTMLDivElement>(null);
@@ -83,7 +87,12 @@ export function ChatContainer({
       </div>
 
       {/* Input Area */}
-      <ChatInput onSend={onSendMessage} disabled={disabled || isLoading} />
+      <ChatInput
+        onSend={onSendMessage}
+        disabled={disabled || isLoading}
+        value={input}
+        onChange={onInputChange}
+      />
     </div>
   );
 }

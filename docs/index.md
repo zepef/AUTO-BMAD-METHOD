@@ -118,6 +118,7 @@ Learn by doing with comprehensive walkthrough examples:
 - **[Custom Module Creation](../examples/custom-module/)** - Build your own domain-specific module
 
 **Best for:**
+
 - New users wanting hands-on learning
 - Understanding different planning tracks
 - Seeing real workflow execution

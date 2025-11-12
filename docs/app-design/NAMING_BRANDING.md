@@ -61,12 +61,15 @@
 ### Color Usage
 
 **Primary Purple**: Trust, innovation, premium
+
 - Used for CTAs, primary actions, brand elements
 
 **Secondary Teal**: Growth, creativity, collaboration
+
 - Used for success states, highlights, accents
 
 **Neutral Slate**: Professional, clean, modern
+
 - Used for UI, text, backgrounds
 
 ---
@@ -83,12 +86,14 @@
 ### Writing Guidelines
 
 **Do:**
+
 - Use "we" and "you" (conversational)
 - Be concise and clear
 - Use active voice
 - Explain technical concepts simply
 
 **Don't:**
+
 - Use jargon unnecessarily
 - Be overly formal
 - Make assumptions about user knowledge

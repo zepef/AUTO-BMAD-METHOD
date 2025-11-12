@@ -292,12 +292,13 @@ graph TD
 
 ```yaml
 # workflow.yaml
-config_source: "{project-root}/{bmad_folder}/bmm/config.yaml"
-project_name: "{config_source}:project_name"
-output_file: "{project-root}/{output_folder}/{project_name}-prd.md"
+config_source: '{project-root}/{bmad_folder}/bmm/config.yaml'
+project_name: '{config_source}:project_name'
+output_file: '{project-root}/{output_folder}/{project_name}-prd.md'
 ```
 
 Resolves to:
+
 ```
 /home/user/my-project/docs/MyProject-prd.md
 ```
@@ -577,20 +578,20 @@ graph LR
 
 ## Component Interaction Matrix
 
-| Component | Depends On | Used By | Purpose |
-|-----------|------------|---------|---------|
-| **BMad-CORE** | None | All modules | Foundation framework |
-| **Workflow Engine** | Core | All workflows | XML-based execution |
-| **Config System** | Core | All modules, workflows | Variable resolution |
-| **Agent Orchestrator** | Core | Party mode | Multi-agent coordination |
-| **BMM Module** | Core | Developers | Software development |
-| **BMB Module** | Core, BMM (reference) | Module creators | Custom solutions |
-| **CIS Module** | Core | BMM (invoked), Users | Innovation workflows |
-| **Installer** | Node.js, npm | Users | Setup and updates |
-| **CLI** | Installer | Users | Command interface |
-| **Web Bundler** | Modules | Web IDEs | Self-contained agents |
-| **Manifest Generator** | Modules | Runtime discovery | CSV manifests |
-| **IDE Adapters** | Installer | IDEs | Integration layer |
+| Component              | Depends On            | Used By                | Purpose                  |
+| ---------------------- | --------------------- | ---------------------- | ------------------------ |
+| **BMad-CORE**          | None                  | All modules            | Foundation framework     |
+| **Workflow Engine**    | Core                  | All workflows          | XML-based execution      |
+| **Config System**      | Core                  | All modules, workflows | Variable resolution      |
+| **Agent Orchestrator** | Core                  | Party mode             | Multi-agent coordination |
+| **BMM Module**         | Core                  | Developers             | Software development     |
+| **BMB Module**         | Core, BMM (reference) | Module creators        | Custom solutions         |
+| **CIS Module**         | Core                  | BMM (invoked), Users   | Innovation workflows     |
+| **Installer**          | Node.js, npm          | Users                  | Setup and updates        |
+| **CLI**                | Installer             | Users                  | Command interface        |
+| **Web Bundler**        | Modules               | Web IDEs               | Self-contained agents    |
+| **Manifest Generator** | Modules               | Runtime discovery      | CSV manifests            |
+| **IDE Adapters**       | Installer             | IDEs                   | Integration layer        |
 
 ---
 
@@ -653,31 +654,37 @@ graph TB
 ## Design Patterns
 
 ### 1. **Module Pattern**
+
 - Self-contained modules with own agents, workflows, and config
 - Dependency injection via core framework
 - Hot-swappable (install/uninstall independently)
 
 ### 2. **Strategy Pattern**
+
 - IDE adapters implement common interface
 - Different strategies for Claude Code, Cursor, Windsurf, etc.
 - Configurable at installation time
 
 ### 3. **Template Method Pattern**
+
 - Workflow engine defines execution skeleton
 - Individual workflows customize steps
 - Hooks for validation, elicitation, child workflows
 
 ### 4. **Observer Pattern**
+
 - Sprint status tracks story state changes
 - Workflows update status as stories progress
 - Multiple workflows can observe/modify status
 
 ### 5. **Builder Pattern**
+
 - Agent compilation builds from YAML source
 - Variable injection, template application
 - Progressive enhancement with customizations
 
 ### 6. **Facade Pattern**
+
 - BMad Master agent provides unified interface
 - Hides complexity of module system
 - Single entry point for users

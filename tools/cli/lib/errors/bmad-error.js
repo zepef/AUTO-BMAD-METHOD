@@ -37,11 +37,6 @@ class BmadError extends Error {
       this.cause = options.cause;
       this.stack = `${this.stack}\nCaused by: ${options.cause.stack}`;
     }
-
-    // Maintains proper stack trace for where our error was thrown (V8 only)
-    if (Error.captureStackTrace) {
-      Error.captureStackTrace(this, BmadError);
-    }
   }
 
   /**

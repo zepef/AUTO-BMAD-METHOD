@@ -16,6 +16,10 @@ export default [
       'test/template-test-generator/**/*.md',
       'test/fixtures/**',
       'test/fixtures/**/*.yaml',
+      '**/.next/**',
+      '**/node_modules/**',
+      '**/.turbo/**',
+      '**/build/**',
     ],
   },
 

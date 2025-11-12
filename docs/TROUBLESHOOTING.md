@@ -39,6 +39,7 @@ graph TD
 ### Installation Failed or Won't Start
 
 **Symptoms:**
+
 - `npx bmad-method@alpha install` fails
 - Error messages during installation
 - Installation hangs or times out
@@ -46,27 +47,34 @@ graph TD
 **Diagnostic Steps:**
 
 1. **Check Node.js version**
+
    ```bash
    node --version
    # Must be v20.0.0 or higher
    ```
+
    - If lower, install Node.js 20+ from [nodejs.org](https://nodejs.org)
 
 2. **Check npm connectivity**
+
    ```bash
    npm ping
    # Should return "Ping success"
    ```
+
    - If fails, check network/proxy settings
 
 3. **Check file permissions**
+
    ```bash
    ls -la
    # Ensure you have write access to current directory
    ```
+
    - If denied, run in a directory you own or use `sudo` (not recommended)
 
 4. **Try with verbose logging**
+
    ```bash
    npx bmad-method@alpha install --verbose
    # Shows detailed installation progress
@@ -80,22 +88,24 @@ graph TD
 
 **Solutions:**
 
-| Error Message | Solution |
-|---------------|----------|
-| "Node version too old" | Upgrade Node.js to v20+ |
-| "Permission denied" | Check folder permissions or run in home directory |
-| "Module not found" | Clear npm cache: `npm cache clean --force` |
+| Error Message                      | Solution                                          |
+| ---------------------------------- | ------------------------------------------------- |
+| "Node version too old"             | Upgrade Node.js to v20+                           |
+| "Permission denied"                | Check folder permissions or run in home directory |
+| "Module not found"                 | Clear npm cache: `npm cache clean --force`        |
 | "Cannot find module 'bmad-method'" | Ensure npm is properly installed: `npm --version` |
-| "Installation timeout" | Check network connection, try again |
+| "Installation timeout"             | Check network connection, try again               |
 
 ### Installation Incomplete or Corrupted
 
 **Symptoms:**
+
 - Installation completed but agents missing
 - Config files not created
 - Manifests empty or missing
 
 **Diagnostic Command:**
+
 ```bash
 npx bmad-method@alpha doctor
 ```
@@ -105,16 +115,19 @@ This runs comprehensive health checks and reports specific issues.
 **Solutions:**
 
 1. **Reinstall with force flag**
+
    ```bash
    npx bmad-method@alpha install --force
    ```
 
 2. **Check installation status**
+
    ```bash
    npx bmad-method@alpha status
    ```
 
 3. **Manually verify key files exist:**
+
    ```bash
    ls -la .bmad/_cfg/manifest.yaml
    ls -la .bmad/core/config.yaml
@@ -129,6 +142,7 @@ This runs comprehensive health checks and reports specific issues.
 ### Update Issues
 
 **Symptoms:**
+
 - Update fails mid-process
 - "No installation found" after update
 - Customizations lost after update
@@ -136,21 +150,25 @@ This runs comprehensive health checks and reports specific issues.
 **Solutions:**
 
 1. **Verify installation exists**
+
    ```bash
    npx bmad-method@alpha status
    ```
 
 2. **Backup customizations before update**
+
    ```bash
    cp -r .bmad/_cfg .bmad/_cfg.backup
    ```
 
 3. **Run update with verbose output**
+
    ```bash
    npx bmad-method@alpha update --verbose
    ```
 
 4. **If update fails, reinstall over existing**
+
    ```bash
    npx bmad-method@alpha install
    # Choose "update" when prompted
@@ -186,12 +204,14 @@ Agent won't load
 **Step-by-Step Solutions:**
 
 1. **Verify agent file exists**
+
    ```bash
    ls -la .bmad/bmm/agents/pm.md
    # Should show file with content
    ```
 
 2. **Check file is readable**
+
    ```bash
    head -20 .bmad/bmm/agents/pm.md
    # Should show agent content, not binary or empty
@@ -203,6 +223,7 @@ Agent won't load
    - Try loading agent using absolute path
 
 4. **Test with different agent**
+
    ```bash
    # Try loading BMad Master (core agent)
    # Load: .bmad/core/agents/bmad-master.md
@@ -216,6 +237,7 @@ Agent won't load
 ### Workflow Not Found
 
 **Symptoms:**
+
 - Agent says "workflow not found"
 - Slash command returns error
 - Workflow shows as "todo" in menu
@@ -223,12 +245,14 @@ Agent won't load
 **Solutions:**
 
 1. **Check workflow exists in module**
+
    ```bash
    ls -la .bmad/bmm/workflows/prd/
    # Should contain: workflow.yaml, instructions.md, template.md
    ```
 
 2. **Verify workflow-manifest.csv**
+
    ```bash
    grep "prd" .bmad/_cfg/workflow-manifest.csv
    # Should show workflow entry
@@ -240,6 +264,7 @@ Agent won't load
    - Use `bmad list` to see all available workflows
 
 4. **Regenerate manifests**
+
    ```bash
    npx bmad-method@alpha install --regenerate-manifests
    ```
@@ -274,6 +299,7 @@ Workflow stuck
    - If in long conversation, start new chat
 
 2. **Verify prerequisites completed**
+
    ```bash
    # Load any agent and run:
    *workflow-status
@@ -285,6 +311,7 @@ Workflow stuck
    - Dev-story workflow needs: story file, epic file
 
 4. **Validate workflow configuration**
+
    ```bash
    cat .bmad/bmm/workflows/prd/workflow.yaml
    # Check for syntax errors
@@ -300,6 +327,7 @@ Workflow stuck
 ### Slash Commands Don't Work
 
 **Symptoms:**
+
 - Typing `/bmad:...` has no effect
 - IDE doesn't recognize command
 - Command treated as regular text
@@ -311,6 +339,7 @@ Workflow stuck
    - Some IDEs use different command syntax
 
 2. **Check IDE configuration installed**
+
    ```bash
    # For Claude Code:
    ls -la .claude/commands/bmad/
@@ -320,6 +349,7 @@ Workflow stuck
    ```
 
 3. **Reinstall IDE integration**
+
    ```bash
    npx bmad-method@alpha install --ide=claude-code
    # Or your IDE name
@@ -341,6 +371,7 @@ Workflow stuck
 ### Variables Not Resolving
 
 **Symptoms:**
+
 - Workflow shows `{project_name}` instead of actual name
 - Paths like `{output_folder}` not replaced
 - Config errors during workflow execution
@@ -363,9 +394,11 @@ Variables not resolving
 **Solutions:**
 
 1. **Verify core config exists and complete**
+
    ```bash
    cat .bmad/core/config.yaml
    ```
+
    Required fields:
    - bmad_folder
    - user_name
@@ -373,6 +406,7 @@ Variables not resolving
    - output_folder
 
 2. **Verify module config exists**
+
    ```bash
    cat .bmad/bmm/config.yaml
    ```
@@ -382,6 +416,7 @@ Variables not resolving
    - Incorrect: `{projectName}` or `{project-name}`
 
 4. **Regenerate configs**
+
    ```bash
    npx bmad-method@alpha install --reset-config
    ```
@@ -389,15 +424,16 @@ Variables not resolving
 5. **Manual config fix**
    Edit `.bmad/core/config.yaml` directly:
    ```yaml
-   bmad_folder: ".bmad"
-   user_name: "Your Name"
-   communication_language: "English"
-   output_folder: "{project-root}/docs"
+   bmad_folder: '.bmad'
+   user_name: 'Your Name'
+   communication_language: 'English'
+   output_folder: '{project-root}/docs'
    ```
 
 ### Config File Errors
 
 **Symptoms:**
+
 - YAML parse errors
 - "Invalid configuration" messages
 - Installation fails at config step
@@ -405,6 +441,7 @@ Variables not resolving
 **Solutions:**
 
 1. **Validate YAML syntax**
+
    ```bash
    # Use online validator or:
    node -e "require('js-yaml').load(require('fs').readFileSync('.bmad/core/config.yaml', 'utf8'))"
@@ -417,6 +454,7 @@ Variables not resolving
    - Missing closing quotes
 
 3. **Reset to defaults**
+
    ```bash
    npx bmad-method@alpha install --reset-config
    # Will prompt for all values again
@@ -431,6 +469,7 @@ Variables not resolving
 ### Want to Change Configuration
 
 **Use Cases:**
+
 - Change output folder location
 - Update user name
 - Switch languages
@@ -439,6 +478,7 @@ Variables not resolving
 **Solutions:**
 
 1. **Edit config files directly**
+
    ```bash
    # Core settings:
    nano .bmad/core/config.yaml
@@ -448,12 +488,14 @@ Variables not resolving
    ```
 
 2. **Reinstall with new settings**
+
    ```bash
    npx bmad-method@alpha install
    # Choose "update existing" and change values when prompted
    ```
 
 3. **Update specific module**
+
    ```bash
    npx bmad-method@alpha install --modules=bmm
    ```
@@ -472,21 +514,25 @@ Variables not resolving
 **By IDE Type:**
 
 **Claude Code:**
+
 - Commands: `/bmad:module:workflows:name`
 - Location: `.claude/commands/bmad/`
 - Fix: Reinstall with `--ide=claude-code`
 
 **Cursor/Windsurf:**
+
 - May use different syntax
 - Check `.cursorrules` or similar
 - See [docs/ide-info/cursor.md](./ide-info/cursor.md)
 
 **VS Code (Copilot Chat):**
+
 - May need workspace configuration
 - Check `.vscode/settings.json`
 - See [docs/ide-info/github-copilot.md](./ide-info/github-copilot.md)
 
 **Generic Solution:**
+
 ```bash
 # Reinstall IDE config
 npx bmad-method@alpha install --ide=your-ide-name
@@ -499,6 +545,7 @@ ls -la .cursor/               # Cursor (if applicable)
 ### Agent Menu Not Appearing
 
 **Symptoms:**
+
 - Agent loads but doesn't show menu
 - No list of available workflows
 - Only generic AI responses
@@ -510,6 +557,7 @@ ls -la .cursor/               # Cursor (if applicable)
    - Start new chat with agent
 
 2. **Load correct agent file**
+
    ```bash
    # Correct: Load from .bmad/module/agents/
    .bmad/bmm/agents/pm.md
@@ -523,6 +571,7 @@ ls -la .cursor/               # Cursor (if applicable)
    - Don't interrupt initial agent load
 
 4. **Check agent file compiled correctly**
+
    ```bash
    grep "Available Workflows" .bmad/bmm/agents/pm.md
    # Should find workflow menu section
@@ -539,6 +588,7 @@ ls -la .cursor/               # Cursor (if applicable)
 ### Installation Too Slow
 
 **Symptoms:**
+
 - Installation takes >5 minutes
 - Hangs at "Installing modules"
 - No progress indicators
@@ -546,18 +596,21 @@ ls -la .cursor/               # Cursor (if applicable)
 **Solutions:**
 
 1. **Check network speed**
+
    ```bash
    npm ping
    # Should respond quickly
    ```
 
 2. **Install fewer modules**
+
    ```bash
    npx bmad-method@alpha install --modules=bmm
    # Install only what you need
    ```
 
 3. **Use local cache**
+
    ```bash
    npm cache verify
    # Then retry installation
@@ -572,6 +625,7 @@ ls -la .cursor/               # Cursor (if applicable)
 ### Workflows Run Slow
 
 **Symptoms:**
+
 - Long delays between agent responses
 - Context window errors
 - Token limit warnings
@@ -587,6 +641,7 @@ ls -la .cursor/               # Cursor (if applicable)
    - Reduces token usage by 90%+
 
 3. **Use Quick Flow track for simple changes**
+
    ```bash
    # Instead of full BMad Method:
    *tech-spec  # Lighter weight
@@ -602,18 +657,18 @@ ls -la .cursor/               # Cursor (if applicable)
 
 ### Common Error Messages and Fixes
 
-| Error Message | Cause | Solution |
-|---------------|-------|----------|
-| "No BMad installation found" | Not installed or wrong directory | Run `bmad status` to verify, or `bmad install` |
-| "Module 'X' not found" | Module not installed | Install: `bmad install --modules=X` |
-| "Cannot find workflow 'X'" | Workflow doesn't exist or typo | Check manifest: `cat .bmad/_cfg/workflow-manifest.csv` |
-| "Invalid configuration" | YAML syntax error in config | Validate YAML, or reset: `bmad install --reset-config` |
-| "Permission denied" | No write access | Check folder permissions |
-| "Node version too old" | Node.js < 20 | Upgrade Node.js to v20+ |
-| "Variable {X} not resolved" | Config incomplete | Check config file has required value |
-| "Workflow is marked as 'todo'" | Not implemented yet | Check module docs for available workflows |
-| "Cannot read file 'X'" | File missing or moved | Verify file exists, check PRD/architecture created |
-| "Manifest not found" | Installation incomplete | Run: `bmad doctor` |
+| Error Message                  | Cause                            | Solution                                               |
+| ------------------------------ | -------------------------------- | ------------------------------------------------------ |
+| "No BMad installation found"   | Not installed or wrong directory | Run `bmad status` to verify, or `bmad install`         |
+| "Module 'X' not found"         | Module not installed             | Install: `bmad install --modules=X`                    |
+| "Cannot find workflow 'X'"     | Workflow doesn't exist or typo   | Check manifest: `cat .bmad/_cfg/workflow-manifest.csv` |
+| "Invalid configuration"        | YAML syntax error in config      | Validate YAML, or reset: `bmad install --reset-config` |
+| "Permission denied"            | No write access                  | Check folder permissions                               |
+| "Node version too old"         | Node.js < 20                     | Upgrade Node.js to v20+                                |
+| "Variable {X} not resolved"    | Config incomplete                | Check config file has required value                   |
+| "Workflow is marked as 'todo'" | Not implemented yet              | Check module docs for available workflows              |
+| "Cannot read file 'X'"         | File missing or moved            | Verify file exists, check PRD/architecture created     |
+| "Manifest not found"           | Installation incomplete          | Run: `bmad doctor`                                     |
 
 ---
 
@@ -622,16 +677,19 @@ ls -la .cursor/               # Cursor (if applicable)
 ### Self-Service Tools
 
 1. **Run health check**
+
    ```bash
    npx bmad-method@alpha doctor
    ```
 
 2. **Check status**
+
    ```bash
    npx bmad-method@alpha status
    ```
 
 3. **View workflow status**
+
    ```bash
    # Load any agent and run:
    *workflow-status
@@ -645,17 +703,20 @@ ls -la .cursor/               # Cursor (if applicable)
 ### Community Support
 
 **Discord (Recommended):**
+
 - [Join BMad Community](https://discord.gg/gk8jAdXWmj)
 - #bugs-issues - Bug reports and troubleshooting
 - #general-dev - General questions and discussion
 - Usually get response within hours
 
 **GitHub Issues:**
+
 - [Report bugs](https://github.com/bmad-code-org/BMAD-METHOD/issues)
 - Use bug report template
 - Include output of `bmad doctor` and `bmad status`
 
 **Before Asking for Help, Include:**
+
 1. Output of `npx bmad-method@alpha doctor`
 2. Output of `npx bmad-method@alpha status`
 3. Node.js version: `node --version`

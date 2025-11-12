@@ -9,6 +9,8 @@ interface ChatInputProps {
   disabled?: boolean;
   placeholder?: string;
   maxLength?: number;
+  value?: string;
+  onChange?: (value: string) => void;
 }
 
 export function ChatInput({
@@ -16,9 +18,15 @@ export function ChatInput({
   disabled = false,
   placeholder = "Type a message... (Shift+Enter for new line)",
   maxLength = 5000,
+  value: controlledValue,
+  onChange: controlledOnChange,
 }: ChatInputProps) {
-  const [message, setMessage] = useState("");
+  const [internalMessage, setInternalMessage] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  // Use controlled value if provided, otherwise use internal state
+  const message = controlledValue !== undefined ? controlledValue : internalMessage;
+  const setMessage = controlledOnChange || setInternalMessage;
 
   // Auto-resize textarea
   useEffect(() => {
@@ -33,7 +41,12 @@ export function ChatInput({
     const trimmed = message.trim();
     if (trimmed && !disabled) {
       onSend(trimmed);
-      setMessage("");
+      // Clear message
+      if (controlledOnChange) {
+        controlledOnChange("");
+      } else {
+        setInternalMessage("");
+      }
       if (textareaRef.current) {
         textareaRef.current.style.height = "auto";
       }

@@ -12,7 +12,10 @@ const installer = new Installer();
 module.exports = {
   command: 'doctor',
   description: 'Run health checks on BMad installation',
-  options: [['-d, --directory <path>', 'Installation directory', '.'], ['--verbose', 'Show detailed output']],
+  options: [
+    ['-d, --directory <path>', 'Installation directory', '.'],
+    ['--verbose', 'Show detailed output'],
+  ],
   action: async (options) => {
     console.log(chalk.cyan('\n🏥 BMad Installation Health Check\n'));
 
@@ -223,7 +226,7 @@ module.exports = {
         await fs.remove(testFile);
         passedChecks++;
         checks.push({ name: 'File permissions', status: 'pass', message: 'Write access verified' });
-      } catch (error) {
+      } catch {
         checks.push({ name: 'File permissions', status: 'fail', message: 'Cannot write to installation directory' });
       }
 

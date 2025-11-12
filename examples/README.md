@@ -7,6 +7,7 @@ Real-world examples demonstrating different planning tracks and workflows.
 ## Available Examples
 
 ### 1. [Quick Flow: Bug Fix](./quick-flow-bug-fix/)
+
 **Planning Track:** Quick Flow
 **Complexity:** Level 0 (Single bug fix)
 **Time to complete:** 15-30 minutes
@@ -15,6 +16,7 @@ Real-world examples demonstrating different planning tracks and workflows.
 **Scenario:** Fix a date formatting bug in a Node.js application
 
 **What you'll learn:**
+
 - Quick Flow workflow execution
 - Tech-spec creation
 - Story-centric development
@@ -23,6 +25,7 @@ Real-world examples demonstrating different planning tracks and workflows.
 ---
 
 ### 2. [BMad Method Track: Web Application](./bmm-track-web-app/)
+
 **Planning Track:** BMad Method
 **Complexity:** Level 2-3 (Product/Platform)
 **Time to complete:** 2-4 hours
@@ -31,6 +34,7 @@ Real-world examples demonstrating different planning tracks and workflows.
 **Scenario:** Build a task management web application from scratch
 
 **What you'll learn:**
+
 - Complete Phase 1-4 workflow
 - PRD creation
 - Architecture decision-making
@@ -40,6 +44,7 @@ Real-world examples demonstrating different planning tracks and workflows.
 ---
 
 ### 3. [Custom Module Creation](./custom-module/)
+
 **Tool:** BMad Builder (BMB)
 **Complexity:** Advanced
 **Time to complete:** 1-2 hours
@@ -48,6 +53,7 @@ Real-world examples demonstrating different planning tracks and workflows.
 **Scenario:** Build a custom "Legal Review" module with specialized agents
 
 **What you'll learn:**
+
 - Creating custom agents
 - Designing guided workflows
 - Module structure and installation
@@ -77,11 +83,13 @@ Real-world examples demonstrating different planning tracks and workflows.
 Before starting any example:
 
 1. **Install BMad Method**
+
    ```bash
    npx bmad-method@alpha install
    ```
 
 2. **Verify installation**
+
    ```bash
    npx bmad-method@alpha doctor
    ```
@@ -97,29 +105,32 @@ Before starting any example:
 
 ## Example Comparison Matrix
 
-| Example | Track | Phases Used | Agents Used | Workflows | Artifacts Created | Estimated Time |
-|---------|-------|-------------|-------------|-----------|-------------------|----------------|
-| **Bug Fix** | Quick Flow | 2, 4 | Developer | tech-spec, dev-story | Tech-spec, Story, Code | 15-30 min |
-| **Web App** | BMad Method | 1, 2, 3, 4 | PM, Architect, Dev | product-brief, prd, architecture, create-epics-and-stories, dev-story | Product Brief, PRD, Architecture, Epics, Stories, Code | 2-4 hours |
-| **Custom Module** | BMB | N/A | BMad Builder | create-agent, create-workflow, create-module | Agent YAML, Workflow files, Module structure | 1-2 hours |
+| Example           | Track       | Phases Used | Agents Used        | Workflows                                                             | Artifacts Created                                      | Estimated Time |
+| ----------------- | ----------- | ----------- | ------------------ | --------------------------------------------------------------------- | ------------------------------------------------------ | -------------- |
+| **Bug Fix**       | Quick Flow  | 2, 4        | Developer          | tech-spec, dev-story                                                  | Tech-spec, Story, Code                                 | 15-30 min      |
+| **Web App**       | BMad Method | 1, 2, 3, 4  | PM, Architect, Dev | product-brief, prd, architecture, create-epics-and-stories, dev-story | Product Brief, PRD, Architecture, Epics, Stories, Code | 2-4 hours      |
+| **Custom Module** | BMB         | N/A         | BMad Builder       | create-agent, create-workflow, create-module                          | Agent YAML, Workflow files, Module structure           | 1-2 hours      |
 
 ---
 
 ## Learning Paths
 
 ### Path 1: Absolute Beginner
+
 1. Start with [Quick Flow Bug Fix](./quick-flow-bug-fix/)
 2. Try a simple feature using Quick Flow
 3. Move to [Web App Example](./bmm-track-web-app/) for full workflow
 4. Explore [Custom Module](./custom-module/) when ready to extend
 
 ### Path 2: Experienced Developer
+
 1. Skim [Web App Example](./bmm-track-web-app/) README
 2. Try implementing a feature in your own project
 3. Reference examples as needed
 4. Create [Custom Module](./custom-module/) for your domain
 
 ### Path 3: Team Lead / Architect
+
 1. Review all example READMEs to understand capabilities
 2. Choose appropriate track for your team's project
 3. Pilot with [Web App Example](./bmm-track-web-app/)
@@ -132,6 +143,7 @@ Before starting any example:
 Use these as practice after completing the examples:
 
 ### Quick Flow Projects
+
 - Add authentication to existing API
 - Fix validation bug in form submission
 - Improve error handling in service
@@ -139,6 +151,7 @@ Use these as practice after completing the examples:
 - Update deprecated package usage
 
 ### BMad Method Projects
+
 - Build a blog platform with CMS
 - Create a real-time chat application
 - Develop an e-commerce storefront
@@ -146,6 +159,7 @@ Use these as practice after completing the examples:
 - Create a data visualization dashboard
 
 ### Custom Module Projects
+
 - Legal document review module
 - Medical diagnosis assistance module
 - Financial analysis module
@@ -167,6 +181,7 @@ Want to add your own example?
 4. **Submit a PR** following [CONTRIBUTING.md](../CONTRIBUTING.md)
 
 **Good example contributions:**
+
 - Real-world scenarios from your experience
 - Different project types (API, CLI, mobile, game, etc.)
 - Different domains (fintech, healthcare, education, etc.)
@@ -178,16 +193,19 @@ Want to add your own example?
 ## Troubleshooting Examples
 
 **Example won't run:**
+
 - Ensure BMad Method is installed: `bmad status`
 - Check you're in the example directory
 - Verify you loaded the correct agent
 
 **Different results than example:**
+
 - AI responses are non-deterministic (expected variation)
 - Your configuration may differ (names, paths)
 - Focus on workflow steps, not exact wording
 
 **Stuck on a step:**
+
 - Check the [Troubleshooting Guide](../docs/TROUBLESHOOTING.md)
 - Review the [FAQ](../docs/FAQ.md)
 - Ask in [Discord #general-dev](https://discord.gg/gk8jAdXWmj)

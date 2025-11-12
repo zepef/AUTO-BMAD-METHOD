@@ -9,6 +9,7 @@ Complete reference of terms, concepts, and acronyms used throughout the BMad Met
 ### BMad-CORE
 
 **BMad-CORE** (Collaboration Optimized Reflection Engine) is the foundational framework powering all BMad modules. It provides:
+
 - Agent orchestration system
 - Workflow engine with XML-based execution
 - Modular architecture for domain-specific solutions
@@ -62,6 +63,7 @@ The orchestrator agent in BMad-CORE with comprehensive knowledge of all installe
 ### Workflow
 
 A guided, multi-step process with structured instructions, best practices, and validation checkpoints. Defined by three files:
+
 - `workflow.yaml` - Configuration and variables
 - `instructions.md` - Step-by-step execution instructions
 - `template.md` - Output document template (optional)
@@ -69,6 +71,7 @@ A guided, multi-step process with structured instructions, best practices, and v
 ### Workflow Execution
 
 The process of running a workflow, typically in a fresh chat with an agent. Workflows can be triggered via:
+
 - Agent menu (natural language or shortcuts)
 - Direct slash commands
 - Party mode
@@ -94,17 +97,21 @@ A reusable, standalone component (typically XML-based) that can be invoked by mu
 BMad Method's scale-adaptive system with three tracks:
 
 #### Quick Flow Track
+
 Bug fixes and small features requiring only a tech-spec. Fastest path from idea to implementation.
 
 #### BMad Method Track
+
 Products, platforms, and complex features requiring PRD, Architecture, and UX design. Full planning workflow.
 
 #### Enterprise Method Track
+
 Enterprise systems with extended planning including Security, DevOps, and Test Strategy (coming soon).
 
 ### Scale Levels (Legacy v4 Terminology)
 
 The v4 system had 5 levels (0-4). v6 replaced this with Planning Tracks, but some documentation may reference:
+
 - **Level 0**: Bug fixes (now Quick Flow)
 - **Level 1**: Small features (now Quick Flow)
 - **Level 2-4**: Various complexity levels (now BMad Method or Enterprise tracks)
@@ -114,15 +121,19 @@ The v4 system had 5 levels (0-4). v6 replaced this with Planning Tracks, but som
 BMad Method's development methodology:
 
 #### Phase 1: Analysis (Optional)
+
 Brainstorming, research, domain exploration, product briefs. Used for new product ideation.
 
 #### Phase 2: Planning (Required)
+
 Scale-adaptive planning: PRD (BMad Method track), tech-spec (Quick Flow), or GDD (game development).
 
 #### Phase 3: Solutioning (Track-dependent)
+
 Architecture decisions, technical design, pattern selection. Required for BMad Method track.
 
 #### Phase 4: Implementation (Iterative)
+
 Story-centric development with sprint planning, story creation, development, code review, and retrospectives.
 
 ---
@@ -178,6 +189,7 @@ Temporary Phase 4 working files stored in `.bmad-ephemeral/`. Includes sprint st
 Advanced optimization that splits large documents into smaller files organized by sections. Enables workflows to load only needed sections, providing 90%+ token savings.
 
 **Structure**:
+
 ```
 PRD/
 ├── index.md           # Table of contents
@@ -189,6 +201,7 @@ PRD/
 ### Variable Resolution
 
 The process of resolving configuration variables through the inheritance chain:
+
 1. Core config → Module config → Workflow config
 2. External file references (e.g., `{config_source}:project_name`)
 3. System variables (e.g., `{project-root}`, `{date}`)
@@ -197,6 +210,7 @@ The process of resolving configuration variables through the inheritance chain:
 ### Configuration Inheritance
 
 Multi-layer configuration system where child configs inherit and can override parent values:
+
 ```
 Core config → Module config → Workflow config → Runtime
 ```
@@ -204,6 +218,7 @@ Core config → Module config → Workflow config → Runtime
 ### Manifest Files
 
 CSV files generated during installation that enable runtime discovery of agents, workflows, and tasks:
+
 - `agent-manifest.csv` - All installed agents
 - `workflow-manifest.csv` - All available workflows
 - `task-manifest.csv` - All reusable tasks
@@ -251,6 +266,7 @@ The system that preserves user customizations in `_cfg/` during module updates. 
 ### workflow-init
 
 Essential initialization workflow that:
+
 1. Analyzes project goal
 2. Recommends appropriate planning track
 3. Creates workflow path tracking files
@@ -269,6 +285,7 @@ YAML file tracking all epics and stories through the development lifecycle. Used
 ### Story Lifecycle
 
 The progression of a story through states:
+
 ```
 TODO → IN_PROGRESS → READY_FOR_REVIEW → DONE
 ```
@@ -288,6 +305,7 @@ Invoked at strategic points via: `<invoke-task>adv-elicit.xml</invoke-task>`
 ### XML Task Engine
 
 The workflow execution engine that interprets XML-based task definitions with structured directives:
+
 - `<step>`, `<substep>`, `<action>` - Hierarchical instructions
 - `<critical>` - Mandatory rules
 - `<check>`, `<if>`, `<goto>` - Control flow
@@ -338,24 +356,31 @@ Optional workflow validation checklist ensuring completeness and quality standar
 ## CLI Commands
 
 ### install
+
 Installs BMad Method with interactive module selection and configuration.
 
 ### update
+
 Updates installed modules while preserving customizations.
 
 ### uninstall
+
 Removes BMad Method installation.
 
 ### status
+
 Shows installation status, installed modules, and configured IDEs.
 
 ### doctor
+
 Runs comprehensive health checks on installation integrity (new in v6).
 
 ### list
+
 Lists available modules and their descriptions.
 
 ### build
+
 Builds web bundles for web-based IDE distribution.
 
 ---
@@ -397,6 +422,7 @@ Throughout BMad Method documentation and agents:
 ## Getting Help
 
 **Terms not in this glossary?**
+
 - Check the [FAQ](./FAQ.md)
 - Browse [complete documentation](./index.md)
 - Ask in [Discord #general-dev](https://discord.gg/gk8jAdXWmj)

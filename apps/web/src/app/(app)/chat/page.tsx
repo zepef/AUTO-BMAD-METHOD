@@ -4,10 +4,8 @@ import { useState } from "react";
 import { ChatContainer } from "@/components/chat/chat-container";
 import { AgentSelector } from "@/components/chat/agent-selector";
 import { type Message, type Agent } from "@/types/chat";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
-const MOCK_AGENTS: Agent[] = [
+const AGENTS: Agent[] = [
   {
     id: "pm",
     name: "John (PM)",
@@ -38,33 +36,22 @@ const MOCK_AGENTS: Agent[] = [
   },
 ];
 
-const MOCK_RESPONSES: Record<string, string[]> = {
-  pm: [
-    "Great question! Let me help you create a comprehensive Product Requirements Document (PRD) for your application.\n\nFirst, I'd like to understand a few key things:\n\n1. **What problem are you trying to solve?**\n2. **Who are your target users?**\n3. **What are the key features you envision?**\n\nOnce I have this information, I can help you create a structured PRD with:\n- Executive Summary\n- User Personas\n- Feature Requirements\n- Success Metrics",
-    "Based on your input, here's what I recommend:\n\n## Key Features\n\n1. **User Authentication**\n   - Email/password login\n   - Social authentication (Google, GitHub)\n   - Password reset flow\n\n2. **Core Functionality**\n   - Dashboard with key metrics\n   - Data visualization\n   - Export capabilities\n\n3. **Collaboration**\n   - Team invitations\n   - Role-based access control\n   - Real-time updates\n\nWould you like me to elaborate on any of these areas?",
-  ],
-  architect: [
-    "Let me help you design the technical architecture for this system.\n\n## System Architecture Overview\n\n```typescript\n// High-level architecture\ninterface SystemArchitecture {\n  frontend: 'Next.js 14 + React 18 + TypeScript';\n  backend: 'Node.js + Fastify + tRPC';\n  database: 'PostgreSQL + Prisma ORM';\n  caching: 'Redis';\n  deployment: 'Vercel (frontend) + Railway (backend)';\n}\n```\n\n### Key Design Decisions\n\n1. **Monorepo Structure** - Using Turborepo for better code organization\n2. **Type Safety** - End-to-end TypeScript with tRPC\n3. **Scalability** - Horizontal scaling with load balancing\n4. **Security** - JWT authentication, CORS, rate limiting\n\nShall we dive deeper into any specific component?",
-  ],
-  developer: [
-    "I can help you implement that feature! Here's a sample implementation:\n\n```typescript\nimport { useState, useEffect } from 'react';\n\nexport function useDataFetcher<T>(url: string) {\n  const [data, setData] = useState<T | null>(null);\n  const [loading, setLoading] = useState(true);\n  const [error, setError] = useState<Error | null>(null);\n\n  useEffect(() => {\n    async function fetchData() {\n      try {\n        const response = await fetch(url);\n        if (!response.ok) throw new Error('Failed to fetch');\n        const json = await response.json();\n        setData(json);\n      } catch (err) {\n        setError(err as Error);\n      } finally {\n        setLoading(false);\n      }\n    }\n    fetchData();\n  }, [url]);\n\n  return { data, loading, error };\n}\n```\n\nThis hook provides:\n- Type safety with generics\n- Loading and error states\n- Automatic cleanup",
-  ],
-  designer: [
-    "Let me help you create an excellent user experience!\n\n## UX Design Principles\n\n### 1. **User-Centered Design**\n- Focus on user needs first\n- Conduct user research\n- Create user personas\n- Map user journeys\n\n### 2. **Visual Hierarchy**\n- Use size, color, and spacing effectively\n- Guide user attention to important elements\n- Maintain consistency throughout\n\n### 3. **Accessibility**\n- WCAG 2.1 AA compliance\n- Keyboard navigation\n- Screen reader support\n- Color contrast ratios\n\nWould you like me to create wireframes for your app?",
-  ],
-};
-
 export default function ChatPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
   const [selectedAgentId, setSelectedAgentId] = useState("pm");
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [responseIndex, setResponseIndex] = useState<Record<string, number>>(
-    {}
-  );
+  const [error, setError] = useState<string | null>(null);
 
-  const selectedAgent = MOCK_AGENTS.find((a) => a.id === selectedAgentId);
+  const selectedAgent = AGENTS.find((a) => a.id === selectedAgentId);
 
-  const handleSendMessage = (content: string) => {
+  const handleSendMessage = async (content: string) => {
+    if (!content.trim() || isLoading) return;
+
+    setError(null);
+    setInput("");
+    setIsLoading(true);
+
     // Add user message
     const userMessage: Message = {
       id: `msg-${Date.now()}`,
@@ -74,32 +61,88 @@ export default function ChatPage() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
-    setIsLoading(true);
 
-    // Simulate AI response after delay
-    setTimeout(() => {
-      const agentResponses = MOCK_RESPONSES[selectedAgentId] || [
-        "I understand. Let me help you with that!",
-      ];
-      const currentIndex = responseIndex[selectedAgentId] || 0;
-      const response = agentResponses[currentIndex % agentResponses.length];
+    // Create assistant message placeholder
+    const assistantMessageId = `msg-${Date.now()}-assistant`;
+    const assistantMessage: Message = {
+      id: assistantMessageId,
+      role: "agent",
+      content: "",
+      timestamp: new Date(),
+      agentName: selectedAgent?.name,
+      agentColor: selectedAgent?.color,
+    };
 
-      const agentMessage: Message = {
-        id: `msg-${Date.now()}-agent`,
-        role: "agent",
-        content: response,
-        timestamp: new Date(),
-        agentName: selectedAgent?.name,
-        agentColor: selectedAgent?.color,
-      };
+    setMessages((prev) => [...prev, assistantMessage]);
 
-      setMessages((prev) => [...prev, agentMessage]);
-      setResponseIndex((prev) => ({
-        ...prev,
-        [selectedAgentId]: currentIndex + 1,
-      }));
+    try {
+      // Call the API with streaming
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          messages: [
+            ...messages.map((m) => ({
+              role: m.role === "agent" ? "assistant" : m.role,
+              content: m.content,
+            })),
+            {
+              role: "user",
+              content,
+            },
+          ],
+          agentId: selectedAgentId,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(errorText || `HTTP error! status: ${response.status}`);
+      }
+
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error("No response body");
+      }
+
+      const decoder = new TextDecoder();
+      let accumulatedContent = "";
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        const chunk = decoder.decode(value, { stream: true });
+        const lines = chunk.split("\n");
+
+        for (const line of lines) {
+          if (line.startsWith("0:")) {
+            // Text content
+            const content = line.slice(2).trim().replace(/^"|"$/g, "");
+            if (content) {
+              accumulatedContent += content;
+              setMessages((prev) =>
+                prev.map((m) =>
+                  m.id === assistantMessageId
+                    ? { ...m, content: accumulatedContent }
+                    : m
+                )
+              );
+            }
+          }
+        }
+      }
+    } catch (err) {
+      console.error("Chat error:", err);
+      setError(err instanceof Error ? err.message : "An error occurred");
+      // Remove the placeholder assistant message on error
+      setMessages((prev) => prev.filter((m) => m.id !== assistantMessageId));
+    } finally {
       setIsLoading(false);
-    }, 1500 + Math.random() * 1000);
+    }
   };
 
   return (
@@ -112,11 +155,15 @@ export default function ChatPage() {
               AI Chat Workspace
             </h2>
             <p className="text-sm text-neutral-600">
-              Chat with specialized AI agents
+              {error ? (
+                <span className="text-error">{error}</span>
+              ) : (
+                "Chat with specialized AI agents powered by real AI"
+              )}
             </p>
           </div>
           <AgentSelector
-            agents={MOCK_AGENTS}
+            agents={AGENTS}
             selectedAgentId={selectedAgentId}
             onSelectAgent={setSelectedAgentId}
           />
@@ -131,6 +178,8 @@ export default function ChatPage() {
           isLoading={isLoading}
           loadingAgentName={selectedAgent?.name}
           loadingAgentColor={selectedAgent?.color}
+          input={input}
+          onInputChange={setInput}
         />
       </div>
     </div>

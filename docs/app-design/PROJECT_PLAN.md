@@ -44,6 +44,7 @@ FlowForge is a cloud-native, team-first platform that transforms software develo
 Modern software development faces critical challenges:
 
 **For Teams:**
+
 - ❌ AI tools optimize individual productivity but fragment team workflow
 - ❌ No shared context between team members using different AI tools
 - ❌ Methodology and structure lost in rush to "just ship code"
@@ -51,6 +52,7 @@ Modern software development faces critical challenges:
 - ❌ Planning documents outdated before implementation starts
 
 **For Companies:**
+
 - ❌ AI tools locked to specific IDEs (Cursor, GitHub Copilot)
 - ❌ Vendor lock-in to single AI provider
 - ❌ No control over data/models in cloud-only solutions
@@ -71,29 +73,32 @@ A platform that provides:
 ### 1.3 Market Opportunity
 
 **Total Addressable Market (TAM):**
+
 - 27M software developers globally (Evans Data Corp, 2024)
 - Average team size: 5-7 developers
 - ~4M software development teams worldwide
 
 **Serviceable Addressable Market (SAM):**
+
 - Teams of 2-50 developers (startup to mid-market)
 - Tech-forward companies adopting AI
 - Estimate: 1M teams ($50-$500/team/month = $600M-$6B/year)
 
 **Serviceable Obtainable Market (SOM):**
+
 - Year 1 target: 1,000 teams
 - Year 3 target: 25,000 teams
 - Year 5 target: 100,000 teams
 
 ### 1.4 Competitive Landscape
 
-| Competitor | Strength | Weakness | FlowForge Advantage |
-|------------|----------|----------|-------------------|
-| **Cursor/Windsurf** | IDE integration, code gen | Single-player, no methodology | Team-first, structured workflow |
-| **GitHub Copilot Workspace** | GitHub integration | One-shot generation, no iteration | Iterative refinement, multi-phase |
-| **v0.dev/Bolt.new** | Fast prototypes | No planning, throwaway code | Planning → architecture → implementation |
-| **Jira/Linear** | Issue tracking | No AI, no execution help | AI-powered planning AND execution |
-| **ChatGPT/Claude** | General purpose | No structure, no persistence | Domain-specific agents, workflow state |
+| Competitor                   | Strength                  | Weakness                          | FlowForge Advantage                      |
+| ---------------------------- | ------------------------- | --------------------------------- | ---------------------------------------- |
+| **Cursor/Windsurf**          | IDE integration, code gen | Single-player, no methodology     | Team-first, structured workflow          |
+| **GitHub Copilot Workspace** | GitHub integration        | One-shot generation, no iteration | Iterative refinement, multi-phase        |
+| **v0.dev/Bolt.new**          | Fast prototypes           | No planning, throwaway code       | Planning → architecture → implementation |
+| **Jira/Linear**              | Issue tracking            | No AI, no execution help          | AI-powered planning AND execution        |
+| **ChatGPT/Claude**           | General purpose           | No structure, no persistence      | Domain-specific agents, workflow state   |
 
 **Positioning:** "The first AI platform designed for how teams actually build software - together, iteratively, with structure."
 
@@ -118,6 +123,7 @@ Move to Next Phase → Export/Integrate → Ship Product
 ### 2.3 Key Personas
 
 #### Primary: "Taylor the Tech Lead"
+
 - 5-7 years experience
 - Leading team of 3-5 developers
 - Frustrated with planning overhead vs. deadline pressure
@@ -125,6 +131,7 @@ Move to Next Phase → Export/Integrate → Ship Product
 - Pain: Keeping team aligned while moving fast
 
 #### Secondary: "Sam the Startup CTO"
+
 - Technical founder
 - Team of 2-10 engineers
 - Needs to scale processes as team grows
@@ -132,6 +139,7 @@ Move to Next Phase → Export/Integrate → Ship Product
 - Pain: Inconsistent practices across team
 
 #### Tertiary: "Morgan the Engineering Manager"
+
 - Managing 3-5 teams (15-30 people)
 - Mid-market company (100-500 employees)
 - Needs visibility and standardization
@@ -141,12 +149,14 @@ Move to Next Phase → Export/Integrate → Ship Product
 ### 2.4 Success Criteria
 
 **User Success:**
+
 - Time to first artifact: < 15 minutes
 - Workflow completion rate: > 80%
 - User satisfaction (NPS): > 40
 - Team adoption: > 70% of invited members active
 
 **Business Success:**
+
 - 40% MoM growth in active teams (Year 1)
 - $500K ARR by end of Year 1
 - $5M ARR by end of Year 2
@@ -160,6 +170,7 @@ Move to Next Phase → Export/Integrate → Ship Product
 ### 3.1 Ideal Customer Profile (ICP)
 
 **Company Characteristics:**
+
 - Company size: 10-500 employees
 - Development team: 2-50 engineers
 - Industry: SaaS, fintech, e-commerce, healthtech
@@ -168,12 +179,14 @@ Move to Next Phase → Export/Integrate → Ship Product
 - Annual budget for dev tools: $50K-$500K
 
 **Buying Behavior:**
+
 - Bottom-up adoption (developers choose tools)
 - Free trial → team pilot → company-wide rollout
 - Decision maker: Engineering Manager or CTO
 - Procurement: Credit card (< $10K/year) or PO (> $10K)
 
 **Psychographics:**
+
 - Early adopters of AI tools
 - Value quality over speed
 - Frustrated with current planning tools
@@ -183,6 +196,7 @@ Move to Next Phase → Export/Integrate → Ship Product
 ### 3.2 Market Segmentation
 
 #### Segment 1: Startup Teams (2-10 devs)
+
 - **Size**: ~500K teams globally
 - **Need**: Fast iteration with minimal process
 - **Track**: Quick Flow + BMad Method
@@ -190,6 +204,7 @@ Move to Next Phase → Export/Integrate → Ship Product
 - **Go-to-Market**: Product Hunt, dev communities, content
 
 #### Segment 2: Scale-up Teams (10-50 devs)
+
 - **Size**: ~200K teams globally
 - **Need**: Standardization without bureaucracy
 - **Track**: BMad Method + Enterprise
@@ -197,6 +212,7 @@ Move to Next Phase → Export/Integrate → Ship Product
 - **Go-to-Market**: Sales-assisted, case studies, ROI calculators
 
 #### Segment 3: Enterprise Teams (50-500 devs)
+
 - **Size**: ~50K teams globally
 - **Need**: Governance, compliance, control
 - **Track**: Enterprise + Custom
@@ -206,14 +222,17 @@ Move to Next Phase → Export/Integrate → Ship Product
 ### 3.3 Geographic Focus
 
 **Phase 1 (Year 1):** English-speaking markets
+
 - United States (primary)
 - Canada, UK, Australia
 
 **Phase 2 (Year 2):** European expansion
+
 - Germany, France, Netherlands, Nordics
 - Begin internationalization (i18n)
 
 **Phase 3 (Year 3):** Global expansion
+
 - APAC (India, Singapore, Japan)
 - Latin America (Brazil, Mexico)
 - Multi-language support
@@ -369,6 +388,7 @@ Move to Next Phase → Export/Integrate → Ship Product
 ### 5.1 Technology Stack
 
 #### Frontend
+
 ```yaml
 Framework: Next.js 14 (App Router)
   Why: React + SSR, optimal performance, great DX
@@ -402,6 +422,7 @@ Build Tool: Turbo + pnpm
 ```
 
 #### Backend
+
 ```yaml
 Runtime: Node.js 20 LTS
   Why: JavaScript full-stack, huge ecosystem
@@ -438,6 +459,7 @@ AI Framework: LangChain.js
 ```
 
 #### Infrastructure
+
 ```yaml
 Hosting (Cloud): Vercel (frontend) + Railway (backend)
   Why: Best-in-class DX, auto-scaling, edge
@@ -520,6 +542,7 @@ graph TB
 ### 5.3 Data Flow
 
 **User Message Flow:**
+
 ```
 User types message
   ↓
@@ -549,6 +572,7 @@ Notify team members (if relevant)
 ```
 
 **Artifact Generation Flow:**
+
 ```
 Agent identifies need for artifact
   ↓
@@ -638,6 +662,7 @@ Commands:
 **Team:** 2 engineers (full-stack)
 
 **Deliverables:**
+
 - [ ] Repository setup (monorepo with Turborepo)
 - [ ] Development environment (Docker Compose)
 - [ ] CI/CD pipeline (GitHub Actions)
@@ -649,6 +674,7 @@ Commands:
 - [ ] WebSocket chat proof-of-concept
 
 **Risks:**
+
 - Multi-model abstraction complexity → Mitigate with adapter pattern
 - Real-time scalability → Test with load testing early
 
@@ -661,6 +687,7 @@ Commands:
 **Sprints:**
 
 **Sprint 1-2: Core Chat (Weeks 5-8)**
+
 - [ ] Chat UI with streaming responses
 - [ ] Markdown rendering + syntax highlighting
 - [ ] Message persistence
@@ -668,6 +695,7 @@ Commands:
 - [ ] Agent switching UI
 
 **Sprint 3-4: Workflows (Weeks 9-12)**
+
 - [ ] Workflow state machine
 - [ ] Progress tracking UI
 - [ ] Tech-spec workflow implementation
@@ -675,6 +703,7 @@ Commands:
 - [ ] Workflow validation
 
 **Sprint 5-6: Artifacts & Collaboration (Weeks 13-16)**
+
 - [ ] Document viewer/editor
 - [ ] Version history
 - [ ] Export to Markdown
@@ -683,6 +712,7 @@ Commands:
 - [ ] Activity feed
 
 **Launch Criteria:**
+
 - 3 working agents (PM, Architect, Dev)
 - 2 complete workflows (tech-spec, PRD)
 - Team collaboration (2-5 members)
@@ -698,6 +728,7 @@ Commands:
 **Team:** 5-6 engineers
 
 **Deliverables:**
+
 - [ ] All 12 agents implemented
 - [ ] All 4 phases with workflows
 - [ ] Document sharding
@@ -716,6 +747,7 @@ Commands:
 **Team:** 8-10 engineers
 
 **Deliverables:**
+
 - [ ] Self-hosting option (Docker)
 - [ ] SSO support (Google, GitHub, SAML)
 - [ ] Advanced analytics
@@ -729,6 +761,7 @@ Commands:
 ### 6.5 Ongoing: Platform Evolution
 
 **Focus Areas:**
+
 - Marketplace for custom workflows
 - Plugin system
 - Mobile native apps (React Native)
@@ -800,12 +833,14 @@ Enterprise Tier:
 ```
 
 **AI Message Pricing:**
+
 - Messages are counted per user request (regardless of length)
 - Agent responses don't count (we eat that cost)
 - Document generation counts as 1 message
 - Party mode counts as 1 message (not per agent)
 
 **Rationale:**
+
 - Predictable base cost (seat-based)
 - Scales with usage (fair for light users)
 - Incentivizes efficiency (users optimize prompts)
@@ -814,6 +849,7 @@ Enterprise Tier:
 ### 7.2 Revenue Projections
 
 **Year 1 (Launch to Month 12):**
+
 ```
 Month 1-3: Beta (100 teams, $0 revenue - free tier testing)
 Month 4: Launch (200 teams, $4K MRR)
@@ -825,6 +861,7 @@ ARR End of Year 1: ~$500K
 ```
 
 **Year 2 (Months 13-24):**
+
 ```
 Focus: Scale to 10,000 teams
 Enterprise customers: 10 @ $50K/year = $500K
@@ -835,6 +872,7 @@ ARR End of Year 2: ~$3.4M
 ```
 
 **Year 3 (Months 25-36):**
+
 ```
 Focus: Scale to 25,000 teams
 Enterprise customers: 50 @ $75K/year = $3.75M
@@ -847,6 +885,7 @@ ARR End of Year 3: ~$12.75M
 ### 7.3 Unit Economics
 
 **Customer Acquisition Cost (CAC):**
+
 ```
 Blended CAC Target: $150/team
   - Self-serve (70%): $50 (content, ads)
@@ -855,6 +894,7 @@ Blended CAC Target: $150/team
 ```
 
 **Lifetime Value (LTV):**
+
 ```
 Average Team (Pro):
   - Monthly revenue: $60 (3 seats @ $20)
@@ -867,6 +907,7 @@ LTV:CAC Ratio: 6:1 (healthy, > 3:1 target)
 ```
 
 **Gross Margin:**
+
 ```
 Revenue: $100
 AI Costs: $20 (OpenAI, Anthropic APIs)
@@ -883,6 +924,7 @@ Gross Margin: 75%
 ### 8.1 Launch Strategy
 
 **Pre-Launch (3 months before):**
+
 - [ ] Build waitlist landing page
 - [ ] Content marketing (blog posts, guides)
 - [ ] Engage in dev communities (Reddit, HN, Discord)
@@ -890,6 +932,7 @@ Gross Margin: 75%
 - [ ] Collect testimonials and case studies
 
 **Launch Week:**
+
 - [ ] Product Hunt launch (aim for #1)
 - [ ] Hacker News Show HN post
 - [ ] Reddit r/programming, r/webdev
@@ -898,6 +941,7 @@ Gross Margin: 75%
 - [ ] Press release to tech media
 
 **Post-Launch (First 3 months):**
+
 - [ ] Weekly blog posts (SEO + education)
 - [ ] YouTube tutorials
 - [ ] Podcast tour (developer podcasts)
@@ -966,12 +1010,14 @@ Gross Margin: 75%
 ### 8.3 Sales Strategy
 
 **Self-Serve (70% of revenue):**
+
 - Free tier → upgrade within app
 - In-app prompts for paid features
 - Email nurture campaigns
 - Chat support converts to sales
 
 **Sales-Assisted (25% of revenue):**
+
 - Inbound leads from website
 - Demo requests → 30-min call
 - 14-day pilot with 5-10 users
@@ -979,6 +1025,7 @@ Gross Margin: 75%
 - Close within 30 days
 
 **Enterprise (5% of revenue):**
+
 - Outbound to target accounts
 - Enterprise AEs (hire at $1M ARR)
 - Multi-month pilots
@@ -992,23 +1039,27 @@ Gross Margin: 75%
 ### 9.1 Product Metrics
 
 **Activation:**
+
 - Time to first message: < 5 min (goal)
 - Time to first artifact: < 15 min (goal)
 - Workflow completion rate: > 60% (MVP), > 80% (mature)
 
 **Engagement:**
+
 - DAU/MAU ratio: > 40% (sticky product)
 - Messages per user per week: > 20
 - Sessions per user per week: > 5
 - Session duration: 15-30 min average
 
 **Retention:**
+
 - Day 1 retention: > 70%
 - Week 1 retention: > 50%
 - Month 1 retention: > 40%
 - Month 3 retention: > 30%
 
 **Collaboration:**
+
 - % teams with 3+ active members: > 60%
 - Messages per team per week: > 100
 - Shared artifacts per project: > 5
@@ -1016,22 +1067,26 @@ Gross Margin: 75%
 ### 9.2 Business Metrics
 
 **Growth:**
+
 - MoM user growth: 30-50% (Year 1)
 - MoM revenue growth: 20-40% (Year 1)
 - Viral coefficient: > 1.5 (invites per user)
 
 **Revenue:**
+
 - ARPU (Average Revenue Per User): $25/month
 - Net Revenue Retention: > 110%
 - Expansion revenue: 30% of total revenue
 
 **Efficiency:**
+
 - CAC: < $150
 - LTV: > $900
 - LTV:CAC: > 6:1
 - Payback period: < 3 months
 
 **Operational:**
+
 - Gross margin: > 70%
 - Burn multiple: < 2x (burn / ARR growth)
 - Magic number: > 0.75 (ARR growth / sales&marketing spend)
@@ -1039,17 +1094,20 @@ Gross Margin: 75%
 ### 9.3 Technical Metrics
 
 **Performance:**
+
 - API response time (p95): < 500ms
 - Chat message latency (p95): < 2s
 - Page load time (p95): < 3s
 - Time to first byte: < 500ms
 
 **Reliability:**
+
 - Uptime: > 99.5% (SLA: 99.9% for Enterprise)
 - Error rate: < 0.1%
 - Mean time to recovery: < 30 min
 
 **Scalability:**
+
 - Concurrent users supported: 10,000+
 - Messages per second: 1,000+
 - Database query time (p95): < 100ms
@@ -1061,36 +1119,37 @@ Gross Margin: 75%
 
 ### 10.1 Technical Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| **AI API rate limits/downtime** | High | High | Multi-model fallback, queue system, status page |
-| **Real-time scalability issues** | Medium | High | Load testing, auto-scaling, CDN |
-| **Data loss or corruption** | Low | Critical | Automated backups, point-in-time recovery, audit logs |
-| **Security breach** | Low | Critical | Penetration testing, bug bounty, SOC 2 |
-| **Poor AI output quality** | Medium | Medium | Prompt engineering, fine-tuning, human review option |
+| Risk                             | Probability | Impact   | Mitigation                                            |
+| -------------------------------- | ----------- | -------- | ----------------------------------------------------- |
+| **AI API rate limits/downtime**  | High        | High     | Multi-model fallback, queue system, status page       |
+| **Real-time scalability issues** | Medium      | High     | Load testing, auto-scaling, CDN                       |
+| **Data loss or corruption**      | Low         | Critical | Automated backups, point-in-time recovery, audit logs |
+| **Security breach**              | Low         | Critical | Penetration testing, bug bounty, SOC 2                |
+| **Poor AI output quality**       | Medium      | Medium   | Prompt engineering, fine-tuning, human review option  |
 
 ### 10.2 Market Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| **Incumbents (GitHub, Atlassian) copy features** | High | High | Move fast, build moat with methodology |
-| **AI models become commoditized** | Medium | Medium | Focus on workflow and team value, not just AI |
-| **Market not ready for AI workflows** | Low | Critical | Beta validation, pivot to simpler use cases |
-| **Regulatory changes (AI regulation)** | Medium | Medium | Compliance program, legal counsel |
+| Risk                                             | Probability | Impact   | Mitigation                                    |
+| ------------------------------------------------ | ----------- | -------- | --------------------------------------------- |
+| **Incumbents (GitHub, Atlassian) copy features** | High        | High     | Move fast, build moat with methodology        |
+| **AI models become commoditized**                | Medium      | Medium   | Focus on workflow and team value, not just AI |
+| **Market not ready for AI workflows**            | Low         | Critical | Beta validation, pivot to simpler use cases   |
+| **Regulatory changes (AI regulation)**           | Medium      | Medium   | Compliance program, legal counsel             |
 
 ### 10.3 Business Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|------------|--------|------------|
-| **Insufficient funding** | Medium | Critical | Raise seed round, bootstrap efficiently |
-| **Can't hire fast enough** | Medium | High | Contractor network, remote-first, competitive comp |
-| **Churn higher than expected** | Medium | High | User research, improve onboarding, success team |
-| **CAC higher than projected** | Medium | Medium | Double-down on organic, optimize paid spend |
-| **Founder conflict** | Low | Critical | Clear roles, communication, mediation plan |
+| Risk                           | Probability | Impact   | Mitigation                                         |
+| ------------------------------ | ----------- | -------- | -------------------------------------------------- |
+| **Insufficient funding**       | Medium      | Critical | Raise seed round, bootstrap efficiently            |
+| **Can't hire fast enough**     | Medium      | High     | Contractor network, remote-first, competitive comp |
+| **Churn higher than expected** | Medium      | High     | User research, improve onboarding, success team    |
+| **CAC higher than projected**  | Medium      | Medium   | Double-down on organic, optimize paid spend        |
+| **Founder conflict**           | Low         | Critical | Clear roles, communication, mediation plan         |
 
 ### 10.4 Mitigation Strategies
 
 **Technical:**
+
 - Multi-cloud strategy (avoid single point of failure)
 - Comprehensive monitoring and alerting
 - Disaster recovery plan (RPO: 1 hour, RTO: 4 hours)
@@ -1098,12 +1157,14 @@ Gross Margin: 75%
 - Feature flags for safe rollouts
 
 **Market:**
+
 - Continuous customer development (weekly user interviews)
 - Competitor monitoring and differentiation
 - Build unique IP (methodology, data, network effects)
 - Diversify customer base (no single customer > 10% revenue)
 
 **Business:**
+
 - 18 months runway minimum
 - Monthly board updates with key metrics
 - Quarterly OKR planning and review
@@ -1138,6 +1199,7 @@ Gross Margin: 75%
 ### 11.2 Hiring Plan
 
 **Year 1 (0-12 months):**
+
 ```
 Month 0: 2 founders
 Month 3: +2 engineers (full-stack)
@@ -1149,6 +1211,7 @@ Total: 10 people
 ```
 
 **Year 2 (13-24 months):**
+
 ```
 Quarter 1: +2 engineers, +1 sales
 Quarter 2: +2 engineers, +1 customer success
@@ -1159,6 +1222,7 @@ Total: 21 people
 ```
 
 **Year 3 (25-36 months):**
+
 ```
 Scale to 50+ people across:
 - Engineering (25)
@@ -1205,24 +1269,28 @@ Scale to 50+ people across:
 ### 12.1 Immediate Actions (Next 30 Days)
 
 **Week 1:**
+
 - [ ] Finalize team composition (founders + initial hires)
 - [ ] Set up legal entity (Delaware C-Corp or LLC)
 - [ ] Open business bank account
 - [ ] Set up accounting (Quickbooks + Pilot.com)
 
 **Week 2:**
+
 - [ ] Create detailed UI mockups (Figma)
 - [ ] Set up development infrastructure
 - [ ] Initialize codebase (monorepo)
 - [ ] Configure CI/CD pipeline
 
 **Week 3:**
+
 - [ ] Implement authentication system
 - [ ] Build basic chat UI
 - [ ] Integrate first AI model (OpenAI)
 - [ ] Database schema v1
 
 **Week 4:**
+
 - [ ] End-to-end test (signup → chat → artifact)
 - [ ] Performance baseline
 - [ ] Security audit (basic)
@@ -1231,17 +1299,20 @@ Scale to 50+ people across:
 ### 12.2 Funding Strategy
 
 **Bootstrap Phase (Months 0-3):**
+
 - Self-funded or friends & family
 - Goal: Prove concept, get first users
 - Budget: $50K-$100K
 
 **Seed Round (Months 4-6):**
+
 - Target: $1M-$2M
 - Valuation: $8M-$12M
 - Investors: Early-stage VCs, angels
 - Use: Team expansion, product development
 
 **Series A (Months 18-24):**
+
 - Target: $8M-$12M
 - Valuation: $40M-$60M
 - Investors: Growth VCs
@@ -1250,24 +1321,28 @@ Scale to 50+ people across:
 ### 12.3 Key Milestones
 
 **Q1 2025:**
+
 - ✅ Project plan complete
 - ✅ Technical architecture defined
 - [ ] Team hired (2-4 engineers)
 - [ ] MVP development started
 
 **Q2 2025:**
+
 - [ ] MVP complete
 - [ ] Private beta (50 teams)
 - [ ] Seed funding secured
 - [ ] Public launch (Product Hunt)
 
 **Q3 2025:**
+
 - [ ] 500 active teams
 - [ ] $15K MRR
 - [ ] All 4 phases implemented
 - [ ] First enterprise customer
 
 **Q4 2025:**
+
 - [ ] 2,000 active teams
 - [ ] $80K MRR
 - [ ] Self-hosting option
@@ -1298,6 +1373,7 @@ FlowForge represents a significant opportunity to transform how software teams c
 **The Ask:**
 
 This is a venture-scale opportunity requiring:
+
 - $2M seed funding
 - World-class technical co-founder
 - Design-minded founding team member

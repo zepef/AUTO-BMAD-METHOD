@@ -32,6 +32,7 @@ Yes! BMad Method is open source under the MIT License. You're free to use, modif
 ### Which IDEs are supported?
 
 BMad Method supports 17+ IDEs including:
+
 - Claude Code (recommended)
 - Cursor
 - Windsurf
@@ -42,6 +43,7 @@ BMad Method supports 17+ IDEs including:
 ### What's the difference between v4 and v6?
 
 v6 is a complete rewrite with major improvements:
+
 - Scale-adaptive planning tracks (Quick Flow, BMad Method, Enterprise)
 - Update-safe customization system
 - Multi-language support
@@ -116,6 +118,7 @@ Or manually delete the `.bmad/` folder (or whatever you named it).
 ### How do I load an agent?
 
 Agent loading is IDE-specific. See your IDE's guide in [docs/ide-info/](./ide-info/). Generally:
+
 1. Open your project in the IDE
 2. Load the agent file (e.g., `.bmad/bmm/agents/pm.md`)
 3. Start a new chat with the agent
@@ -123,6 +126,7 @@ Agent loading is IDE-specific. See your IDE's guide in [docs/ide-info/](./ide-in
 ### Why isn't my agent loading?
 
 Common causes:
+
 - **Wrong file location**: Make sure you're loading from `.bmad/[module]/agents/`
 - **Installation incomplete**: Run `npx bmad-method@alpha status` to verify
 - **IDE not configured**: Check your IDE-specific setup in [docs/ide-info/](./ide-info/)
@@ -139,10 +143,10 @@ This starts a multi-agent collaboration where all installed agents contribute th
 Create a customization file in `.bmad/_cfg/agents/[agent-name].yaml`:
 
 ```yaml
-name: "Custom Name"
-role: "Custom Role"
-persona: "Custom personality description..."
-communication_language: "English"
+name: 'Custom Name'
+role: 'Custom Role'
+persona: 'Custom personality description...'
+communication_language: 'English'
 ```
 
 See your agent's documentation for available customization options.
@@ -168,19 +172,23 @@ Not sure which? Run `*workflow-init` for guidance.
 Three ways:
 
 **Method 1: Agent Menu** (Recommended for beginners)
+
 1. Load an agent
 2. Tell the agent what to run: `*workflow-init` or "Run workflow-init"
 
 **Method 2: Direct Slash Commands**
+
 ```
 /bmad:bmm:workflows:workflow-init
 /bmad:bmm:workflows:prd
 ```
 
 **Method 3: Party Mode**
+
 ```
 /bmad:core:workflows:party-mode
 ```
+
 Then execute any workflow with multi-agent collaboration.
 
 ### What does "fresh chat" mean?
@@ -190,6 +198,7 @@ Starting a fresh chat means opening a new conversation with the agent. This prev
 ### Do I need to follow all phases?
 
 It depends on your planning track:
+
 - **Quick Flow**: Phase 2 (tech-spec) → Phase 4 (implementation)
 - **BMad Method**: Phase 1 (optional) → Phase 2 (PRD) → Phase 3 (architecture) → Phase 4 (stories)
 - **Enterprise Method**: All phases including extended planning
@@ -198,9 +207,10 @@ It depends on your planning track:
 
 Not recommended! Each workflow builds context for the next. Skipping workflows may result in incomplete documentation or missing requirements.
 
-### What is *workflow-init?
+### What is \*workflow-init?
 
 `*workflow-init` is a guided setup workflow that:
+
 1. Analyzes your project goal
 2. Recommends the appropriate planning track
 3. Sets up your workflow path
@@ -225,6 +235,7 @@ Always start here for new projects!
 ### How does configuration inheritance work?
 
 Configuration resolves in this order:
+
 1. Core config (user name, languages, output folder)
 2. Module configs (inherit from core, add module-specific)
 3. Workflow configs (inherit from module, add workflow-specific)
@@ -285,6 +296,7 @@ BMad v6 can detect and upgrade v4 installations. Follow the prompts or see the [
 ### Should I commit the .bmad/ folder to git?
 
 **Recommended approach:**
+
 - **Commit**: `.bmad/` folder (agents and workflows)
 - **Ignore**: `.bmad-ephemeral/` folder (temporary Phase 4 artifacts)
 

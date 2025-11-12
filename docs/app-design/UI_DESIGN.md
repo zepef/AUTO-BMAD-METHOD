@@ -97,14 +97,14 @@ export const typography = {
   },
 
   fontSize: {
-    xs: '0.75rem',     // 12px
-    sm: '0.875rem',    // 14px
-    base: '1rem',      // 16px
-    lg: '1.125rem',    // 18px
-    xl: '1.25rem',     // 20px
-    '2xl': '1.5rem',   // 24px
+    xs: '0.75rem', // 12px
+    sm: '0.875rem', // 14px
+    base: '1rem', // 16px
+    lg: '1.125rem', // 18px
+    xl: '1.25rem', // 20px
+    '2xl': '1.5rem', // 24px
     '3xl': '1.875rem', // 30px
-    '4xl': '2.25rem',  // 36px
+    '4xl': '2.25rem', // 36px
   },
 
   fontWeight: {
@@ -128,17 +128,17 @@ export const typography = {
 // spacing.ts
 export const spacing = {
   0: '0',
-  1: '0.25rem',  // 4px
-  2: '0.5rem',   // 8px
-  3: '0.75rem',  // 12px
-  4: '1rem',     // 16px
-  5: '1.25rem',  // 20px
-  6: '1.5rem',   // 24px
-  8: '2rem',     // 32px
-  10: '2.5rem',  // 40px
-  12: '3rem',    // 48px
-  16: '4rem',    // 64px
-  20: '5rem',    // 80px
+  1: '0.25rem', // 4px
+  2: '0.5rem', // 8px
+  3: '0.75rem', // 12px
+  4: '1rem', // 16px
+  5: '1.25rem', // 20px
+  6: '1.5rem', // 24px
+  8: '2rem', // 32px
+  10: '2.5rem', // 40px
+  12: '3rem', // 48px
+  16: '4rem', // 64px
+  20: '5rem', // 80px
 };
 ```
 
@@ -162,12 +162,12 @@ export const shadows = {
 // radius.ts
 export const radius = {
   none: '0',
-  sm: '0.25rem',   // 4px
-  base: '0.5rem',  // 8px
-  md: '0.75rem',   // 12px
-  lg: '1rem',      // 16px
-  xl: '1.5rem',    // 24px
-  full: '9999px',  // Fully rounded
+  sm: '0.25rem', // 4px
+  base: '0.5rem', // 8px
+  md: '0.75rem', // 12px
+  lg: '1rem', // 16px
+  xl: '1.5rem', // 24px
+  full: '9999px', // Fully rounded
 };
 ```
 
@@ -944,7 +944,7 @@ export function useChat(projectId: string) {
         content,
       });
     },
-    [conversation, sendMessageMutation]
+    [conversation, sendMessageMutation],
   );
 
   return {
@@ -1085,10 +1085,10 @@ export const useChatStore = create<ChatState>((set) => ({
 export default {
   theme: {
     screens: {
-      'sm': '640px',   // Mobile landscape
-      'md': '768px',   // Tablet
-      'lg': '1024px',  // Desktop
-      'xl': '1280px',  // Large desktop
+      sm: '640px', // Mobile landscape
+      md: '768px', // Tablet
+      lg: '1024px', // Desktop
+      xl: '1280px', // Large desktop
       '2xl': '1536px', // Extra large
     },
   },
