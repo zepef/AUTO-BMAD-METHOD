@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -86,12 +87,22 @@ const STATUS_VARIANTS = {
 };
 
 export function ArtifactsPanel() {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState("all");
 
   const filteredArtifacts =
     activeTab === "all"
       ? MOCK_ARTIFACTS
       : MOCK_ARTIFACTS.filter((a) => a.type === activeTab);
+
+  const handleArtifactClick = (artifactId: string) => {
+    router.push(`/artifacts/${artifactId}`);
+  };
+
+  const handleNewArtifact = () => {
+    // In production, this would create a new artifact and navigate to it
+    alert("Create new artifact - will be implemented!");
+  };
 
   return (
     <aside className="flex w-80 flex-col border-l border-neutral-200 bg-white">
@@ -103,7 +114,7 @@ export function ArtifactsPanel() {
             {MOCK_ARTIFACTS.length} documents
           </p>
         </div>
-        <Button size="sm" className="gap-2">
+        <Button size="sm" className="gap-2" onClick={handleNewArtifact}>
           <Plus className="h-4 w-4" />
           <span className="hidden xl:inline">New</span>
         </Button>
@@ -142,6 +153,7 @@ export function ArtifactsPanel() {
                   return (
                     <button
                       key={artifact.id}
+                      onClick={() => handleArtifactClick(artifact.id)}
                       className="group w-full rounded-lg border border-neutral-200 bg-white p-3 text-left transition-all hover:border-primary-300 hover:shadow-sm"
                     >
                       <div className="flex items-start gap-3">
@@ -182,8 +194,9 @@ export function ArtifactsPanel() {
                                 className="h-6 w-6"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  alert("Download artifact");
+                                  alert("Download artifact - will be implemented!");
                                 }}
+                                title="Download"
                               >
                                 <Download className="h-3 w-3" />
                               </Button>
@@ -193,8 +206,9 @@ export function ArtifactsPanel() {
                                 className="h-6 w-6"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  alert("Open artifact");
+                                  handleArtifactClick(artifact.id);
                                 }}
+                                title="Open in editor"
                               >
                                 <ExternalLink className="h-3 w-3" />
                               </Button>

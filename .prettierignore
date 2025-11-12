@@ -1,2 +1,15 @@
 # Test fixtures with intentionally broken/malformed files
 test/fixtures/**
+
+# Build outputs
+**/node_modules/
+**/.next/
+**/dist/
+**/build/
+**/.turbo/
+**/coverage/
+
+# Lock files and generated manifests
+**/pnpm-lock.yaml
+**/package-lock.json
+**/yarn.lock
