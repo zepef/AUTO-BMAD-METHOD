@@ -25,6 +25,13 @@ Complete map of all BMad Method v6 documentation with recommended reading paths.
 - **[CHANGELOG.md](../CHANGELOG.md)** - Version history and breaking changes
 - **[CLAUDE.md](../CLAUDE.md)** - Claude Code specific guidelines for this project
 
+### Essential References (NEW!)
+
+- **[FAQ](./FAQ.md)** - Frequently asked questions with detailed answers
+- **[Glossary](./GLOSSARY.md)** - Complete terminology and concepts reference
+- **[Troubleshooting Guide](./TROUBLESHOOTING.md)** - Systematic problem diagnosis and resolution
+- **[Architecture Guide](./ARCHITECTURE.md)** - Visual diagrams and system architecture
+
 ### Installation & Setup
 
 - **[v4 to v6 Upgrade Guide](./v4-to-v6-upgrade.md)** - Migration path for v4 users
@@ -98,6 +105,23 @@ Instructions for loading agents and running workflows in your development enviro
 - [IDE Injections Reference](./installers-bundlers/ide-injections.md) - How agents are installed to IDEs
 - [Installers & Platforms Reference](./installers-bundlers/installers-modules-platforms-reference.md) - CLI tool and platform support
 - [Web Bundler Usage](./installers-bundlers/web-bundler-usage.md) - Creating web-compatible bundles
+
+---
+
+## 📚 Examples & Tutorials (NEW!)
+
+Learn by doing with comprehensive walkthrough examples:
+
+- **[Examples Overview](../examples/README.md)** - All available examples and learning paths
+- **[Quick Flow Bug Fix](../examples/quick-flow-bug-fix/README.md)** - 15-30 min tutorial for beginners
+- **[BMad Method Web App](../examples/bmm-track-web-app/)** - 2-4 hour complete workflow example
+- **[Custom Module Creation](../examples/custom-module/)** - Build your own domain-specific module
+
+**Best for:**
+- New users wanting hands-on learning
+- Understanding different planning tracks
+- Seeing real workflow execution
+- Template for your own projects
 
 ---
 

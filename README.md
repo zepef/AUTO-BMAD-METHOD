@@ -366,6 +366,20 @@ Optional optimization for large projects (BMad Method and Enterprise tracks):
 
 **Requirements:** Node.js 22+ (see `.nvmrc`). Run `nvm use` to switch to the correct version.
 
+### Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/bmad-code-org/BMAD-METHOD.git
+cd BMAD-METHOD
+
+# Install all dependencies
+npm install
+
+# Verify setup
+npm test
+```
+
 ### Testing & Validation
 
 ```bash
