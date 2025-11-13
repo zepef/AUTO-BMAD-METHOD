@@ -15,52 +15,11 @@ import {
   Plus,
   Download,
   ExternalLink,
+  Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-
-interface Artifact {
-  id: string;
-  type: "prd" | "architecture" | "story" | "epic" | "tech-spec" | "document";
-  title: string;
-  description: string;
-  updatedAt: string;
-  status: "draft" | "in-progress" | "completed";
-}
-
-const MOCK_ARTIFACTS: Artifact[] = [
-  {
-    id: "1",
-    type: "prd",
-    title: "E-commerce Platform PRD",
-    description: "Product requirements for the new e-commerce platform",
-    updatedAt: "2h ago",
-    status: "in-progress",
-  },
-  {
-    id: "2",
-    type: "architecture",
-    title: "System Architecture",
-    description: "Technical architecture and design decisions",
-    updatedAt: "5h ago",
-    status: "completed",
-  },
-  {
-    id: "3",
-    type: "story",
-    title: "User Authentication Story",
-    description: "Implement email/password authentication",
-    updatedAt: "1d ago",
-    status: "draft",
-  },
-  {
-    id: "4",
-    type: "tech-spec",
-    title: "API Gateway Specification",
-    description: "Technical specification for API gateway service",
-    updatedAt: "2d ago",
-    status: "completed",
-  },
-];
+import { trpc } from "@/lib/trpc/client";
+import { formatDistanceToNow } from "date-fns";
 
 const ARTIFACT_ICONS = {
   prd: FileText,
@@ -86,23 +45,57 @@ const STATUS_VARIANTS = {
   completed: "success" as const,
 };
 
+type ArtifactType = "prd" | "architecture" | "story" | "epic" | "tech-spec" | "document";
+
 export function ArtifactsPanel() {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState("all");
+  const [activeTab, setActiveTab] = useState<"all" | ArtifactType>("all");
+  const utils = trpc.useUtils();
 
-  const filteredArtifacts =
-    activeTab === "all"
-      ? MOCK_ARTIFACTS
-      : MOCK_ARTIFACTS.filter((a) => a.type === activeTab);
+  // Fetch artifacts with optional type filter
+  const { data, isLoading, error } = trpc.artifact.list.useQuery({
+    type: activeTab === "all" ? undefined : activeTab,
+    limit: 50,
+  });
+
+  // Create artifact mutation
+  const createArtifact = trpc.artifact.create.useMutation({
+    onSuccess: (newArtifact) => {
+      // Refresh the list
+      utils.artifact.list.invalidate();
+      // Navigate to the new artifact
+      router.push(`/artifacts/${newArtifact.id}`);
+    },
+    onError: (error) => {
+      alert(`Error creating artifact: ${error.message}`);
+    },
+  });
 
   const handleArtifactClick = (artifactId: string) => {
     router.push(`/artifacts/${artifactId}`);
   };
 
   const handleNewArtifact = () => {
-    // In production, this would create a new artifact and navigate to it
-    alert("Create new artifact - will be implemented!");
+    createArtifact.mutate({
+      type: activeTab === "all" ? "document" : activeTab,
+      title: "New Document",
+      description: "Click to edit description",
+      content: "",
+      status: "draft",
+    });
   };
+
+  const handleDownload = (artifact: any) => {
+    const blob = new Blob([artifact.content || ""], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${artifact.title.replace(/\s+/g, "-").toLowerCase()}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const artifacts = data?.artifacts || [];
 
   return (
     <aside className="flex w-80 flex-col border-l border-neutral-200 bg-white">
@@ -111,17 +104,26 @@ export function ArtifactsPanel() {
         <div>
           <h2 className="text-sm font-semibold text-neutral-900">Artifacts</h2>
           <p className="text-xs text-neutral-500">
-            {MOCK_ARTIFACTS.length} documents
+            {isLoading ? "Loading..." : `${artifacts.length} documents`}
           </p>
         </div>
-        <Button size="sm" className="gap-2" onClick={handleNewArtifact}>
-          <Plus className="h-4 w-4" />
+        <Button
+          size="sm"
+          className="gap-2"
+          onClick={handleNewArtifact}
+          disabled={createArtifact.isPending}
+        >
+          {createArtifact.isPending ? (
+            <Loader2 className="h-4 w-4 animate-spin" />
+          ) : (
+            <Plus className="h-4 w-4" />
+          )}
           <span className="hidden xl:inline">New</span>
         </Button>
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 overflow-hidden flex flex-col">
+      <Tabs value={activeTab} onValueChange={(v) => setActiveTab(v as typeof activeTab)} className="flex-1 overflow-hidden flex flex-col">
         <TabsList className="mx-4 mt-4 grid w-auto grid-cols-3">
           <TabsTrigger value="all" className="text-xs">
             All
@@ -137,7 +139,27 @@ export function ArtifactsPanel() {
         <TabsContent value={activeTab} className="flex-1 overflow-hidden mt-0">
           <ScrollArea className="h-full">
             <div className="space-y-2 p-4">
-              {filteredArtifacts.length === 0 ? (
+              {/* Loading State */}
+              {isLoading && (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <Loader2 className="mb-3 h-12 w-12 animate-spin text-neutral-300" />
+                  <p className="text-sm text-neutral-500">Loading artifacts...</p>
+                </div>
+              )}
+
+              {/* Error State */}
+              {error && (
+                <div className="flex flex-col items-center justify-center py-12 text-center">
+                  <FileText className="mb-3 h-12 w-12 text-red-300" />
+                  <p className="text-sm text-red-600">Error loading artifacts</p>
+                  <p className="mt-1 text-xs text-neutral-400">
+                    {error.message}
+                  </p>
+                </div>
+              )}
+
+              {/* Empty State */}
+              {!isLoading && !error && artifacts.length === 0 && (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
                   <FileText className="mb-3 h-12 w-12 text-neutral-300" />
                   <p className="text-sm text-neutral-500">No artifacts yet</p>
@@ -145,10 +167,13 @@ export function ArtifactsPanel() {
                     Create your first document
                   </p>
                 </div>
-              ) : (
-                filteredArtifacts.map((artifact) => {
-                  const Icon = ARTIFACT_ICONS[artifact.type];
-                  const colorClass = ARTIFACT_COLORS[artifact.type];
+              )}
+
+              {/* Artifacts List */}
+              {!isLoading && !error && artifacts.length > 0 && (
+                artifacts.map((artifact: any) => {
+                  const Icon = ARTIFACT_ICONS[artifact.type as ArtifactType] || FileText;
+                  const colorClass = ARTIFACT_COLORS[artifact.type as ArtifactType] || "text-neutral-600";
 
                   return (
                     <button
@@ -172,7 +197,7 @@ export function ArtifactsPanel() {
                               {artifact.title}
                             </h3>
                             <Badge
-                              variant={STATUS_VARIANTS[artifact.status]}
+                              variant={STATUS_VARIANTS[artifact.status as keyof typeof STATUS_VARIANTS] || "outline"}
                               className="shrink-0 text-[10px]"
                             >
                               {artifact.status}
@@ -180,12 +205,12 @@ export function ArtifactsPanel() {
                           </div>
 
                           <p className="mt-1 line-clamp-2 text-xs text-neutral-600">
-                            {artifact.description}
+                            {artifact.description || "No description"}
                           </p>
 
                           <div className="mt-2 flex items-center justify-between">
                             <span className="text-xs text-neutral-500">
-                              {artifact.updatedAt}
+                              {formatDistanceToNow(new Date(artifact.updatedAt), { addSuffix: true })}
                             </span>
                             <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                               <Button
@@ -194,7 +219,7 @@ export function ArtifactsPanel() {
                                 className="h-6 w-6"
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  alert("Download artifact - will be implemented!");
+                                  handleDownload(artifact);
                                 }}
                                 title="Download"
                               >
@@ -227,7 +252,16 @@ export function ArtifactsPanel() {
 
       {/* Quick Actions Footer */}
       <div className="border-t border-neutral-200 p-3">
-        <Button variant="outline" size="sm" className="w-full gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full gap-2"
+          disabled={artifacts.length === 0}
+          onClick={() => {
+            // Export all artifacts as a ZIP or combined markdown
+            alert("Export all functionality - to be implemented!");
+          }}
+        >
           <Download className="h-4 w-4" />
           Export All
         </Button>
