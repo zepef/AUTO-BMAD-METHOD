@@ -41,10 +41,20 @@ declare module "@prisma/client" {
       count(args?: any): Promise<number>;
     };
 
+    chatSession: {
+      findUnique(args: any): Promise<any>;
+      findMany(args?: any): Promise<any[]>;
+      create(args: any): Promise<any>;
+      update(args: any): Promise<any>;
+      delete(args: any): Promise<any>;
+      count(args?: any): Promise<number>;
+    };
+
     message: {
       findMany(args?: any): Promise<any[]>;
       create(args: any): Promise<any>;
       delete(args: any): Promise<any>;
+      deleteMany(args?: any): Promise<any>;
     };
 
     agentConfig: {

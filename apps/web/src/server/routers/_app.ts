@@ -7,12 +7,13 @@
 import { createTRPCRouter } from "../trpc";
 import { artifactRouter } from "./artifact";
 import { projectRouter } from "./project";
+import { chatRouter } from "./chat";
 
 export const appRouter = createTRPCRouter({
   artifact: artifactRouter,
   project: projectRouter,
+  chat: chatRouter,
   // Add more routers here as needed:
-  // message: messageRouter,
   // user: userRouter,
 });
 
