@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AppSidebar } from "./app-sidebar";
 import { AppNavbar } from "./app-navbar";
 import { ArtifactsPanel } from "./artifacts-panel";
-import { CommandPalette } from "./command-palette";
+import { GlobalSearch } from "../global-search";
 import { cn } from "@/lib/utils";
 
 interface AppLayoutProps {
@@ -14,14 +14,27 @@ interface AppLayoutProps {
 export function AppLayout({ children }: AppLayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [artifactsPanelOpen, setArtifactsPanelOpen] = useState(true);
-  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
+  const [globalSearchOpen, setGlobalSearchOpen] = useState(false);
+
+  // Keyboard shortcut (Cmd+K / Ctrl+K)
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setGlobalSearchOpen(true);
+      }
+    };
+
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
 
   return (
     <div className="flex h-screen overflow-hidden bg-neutral-50">
-      {/* Command Palette */}
-      <CommandPalette
-        open={commandPaletteOpen}
-        onOpenChange={setCommandPaletteOpen}
+      {/* Global Search */}
+      <GlobalSearch
+        open={globalSearchOpen}
+        onOpenChange={setGlobalSearchOpen}
       />
 
       {/* Left Sidebar */}
@@ -34,7 +47,7 @@ export function AppLayout({ children }: AppLayoutProps) {
       <div className="flex flex-1 flex-col overflow-hidden">
         {/* Top Navigation */}
         <AppNavbar
-          onCommandPaletteOpen={() => setCommandPaletteOpen(true)}
+          onCommandPaletteOpen={() => setGlobalSearchOpen(true)}
           onArtifactsPanelToggle={() => setArtifactsPanelOpen(!artifactsPanelOpen)}
           artifactsPanelOpen={artifactsPanelOpen}
         />

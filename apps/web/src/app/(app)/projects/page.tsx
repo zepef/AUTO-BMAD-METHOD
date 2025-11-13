@@ -29,6 +29,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Plus,
   FolderKanban,
@@ -37,11 +44,16 @@ import {
   MoreVertical,
   ArrowRight,
   Loader2,
+  Sparkles,
+  Download,
+  Upload,
 } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { trpc } from "@/lib/trpc/client";
 import { formatDistanceToNow } from "date-fns";
+import { PROJECT_TEMPLATES, type ProjectTemplate } from "@/lib/project-templates";
+import { cn } from "@/lib/utils";
 
 const STATUS_VARIANTS = {
   active: "default" as const,
@@ -59,6 +71,10 @@ export default function ProjectsPage() {
   const router = useRouter();
   const utils = trpc.useUtils();
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isImportDialogOpen, setIsImportDialogOpen] = useState(false);
+  const [selectedTemplate, setSelectedTemplate] = useState<ProjectTemplate | null>(null);
+  const [createMode, setCreateMode] = useState<"blank" | "template">("blank");
+  const [importFile, setImportFile] = useState<File | null>(null);
   const [newProject, setNewProject] = useState({
     name: "",
     description: "",
@@ -73,13 +89,15 @@ export default function ProjectsPage() {
   // Fetch stats
   const { data: stats } = trpc.project.stats.useQuery();
 
-  // Create project mutation
+  // Create project mutation (blank)
   const createProject = trpc.project.create.useMutation({
     onSuccess: (newProjectData) => {
       utils.project.list.invalidate();
       utils.project.stats.invalidate();
       setIsCreateDialogOpen(false);
       setNewProject({ name: "", description: "", status: "active" });
+      setSelectedTemplate(null);
+      setCreateMode("blank");
       router.push(`/projects/${newProjectData.id}`);
     },
     onError: (error) => {
@@ -87,14 +105,99 @@ export default function ProjectsPage() {
     },
   });
 
+  // Create project from template mutation
+  const createFromTemplate = trpc.project.createFromTemplate.useMutation({
+    onSuccess: (newProjectData) => {
+      utils.project.list.invalidate();
+      utils.project.stats.invalidate();
+      setIsCreateDialogOpen(false);
+      setNewProject({ name: "", description: "", status: "active" });
+      setSelectedTemplate(null);
+      setCreateMode("blank");
+      router.push(`/projects/${newProjectData.id}`);
+    },
+    onError: (error) => {
+      alert(`Error creating project: ${error.message}`);
+    },
+  });
+
+  // Import project mutation
+  const importProject = trpc.project.import.useMutation({
+    onSuccess: (importedProject) => {
+      utils.project.list.invalidate();
+      utils.project.stats.invalidate();
+      setIsImportDialogOpen(false);
+      setImportFile(null);
+      alert(`Successfully imported project: ${importedProject?.name}`);
+      router.push(`/projects/${importedProject?.id}`);
+    },
+    onError: (error) => {
+      alert(`Error importing project: ${error.message}`);
+    },
+  });
+
   const handleCreateProject = () => {
-    if (!newProject.name.trim()) {
-      alert("Please enter a project name");
-      return;
+    if (createMode === "template" && selectedTemplate) {
+      // Create from template
+      createFromTemplate.mutate({
+        templateId: selectedTemplate.id,
+        name: newProject.name.trim() || undefined,
+        description: newProject.description.trim() || undefined,
+      });
+    } else {
+      // Create blank project
+      if (!newProject.name.trim()) {
+        alert("Please enter a project name");
+        return;
+      }
+      createProject.mutate(newProject);
     }
-    createProject.mutate(newProject);
   };
 
+  const handleExportProject = async (projectId: string, projectName: string) => {
+    try {
+      // Fetch export data using tRPC
+      const exportData = await trpc.project.export.query({ id: projectId });
+
+      // Create downloadable file
+      const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+        type: "application/json",
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${projectName.replace(/\s+/g, "-").toLowerCase()}-export.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error: any) {
+      alert(`Error exporting project: ${error.message}`);
+    }
+  };
+
+  const handleImportProject = async () => {
+    if (!importFile) {
+      alert("Please select a file to import");
+      return;
+    }
+
+    try {
+      const fileContent = await importFile.text();
+      const importData = JSON.parse(fileContent);
+
+      // Validate structure
+      if (!importData.version || !importData.project) {
+        throw new Error("Invalid export file format");
+      }
+
+      importProject.mutate({ data: importData });
+    } catch (error: any) {
+      alert(`Error importing project: ${error.message}`);
+    }
+  };
+
+  const isCreating = createProject.isPending || createFromTemplate.isPending;
   const projects = data?.projects ?? [];
 
   // Loading state
@@ -129,10 +232,16 @@ export default function ProjectsPage() {
               Manage your software development projects
             </p>
           </div>
-          <Button className="gap-2" onClick={() => setIsCreateDialogOpen(true)}>
-            <Plus className="h-4 w-4" />
-            New Project
-          </Button>
+          <div className="flex gap-2">
+            <Button variant="outline" className="gap-2" onClick={() => setIsImportDialogOpen(true)}>
+              <Upload className="h-4 w-4" />
+              Import
+            </Button>
+            <Button className="gap-2" onClick={() => setIsCreateDialogOpen(true)}>
+              <Plus className="h-4 w-4" />
+              New Project
+            </Button>
+          </div>
         </div>
 
         {/* Stats */}
@@ -221,9 +330,21 @@ export default function ProjectsPage() {
                         </CardDescription>
                       </div>
                     </div>
-                    <Button variant="ghost" size="icon" className="shrink-0">
-                      <MoreVertical className="h-4 w-4" />
-                    </Button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" size="icon" className="shrink-0">
+                          <MoreVertical className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end">
+                        <DropdownMenuItem
+                          onClick={() => handleExportProject(project.id, project.name)}
+                        >
+                          <Download className="mr-2 h-4 w-4" />
+                          Export Project
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
                 </CardHeader>
 
@@ -296,76 +417,253 @@ export default function ProjectsPage() {
 
       {/* Create Project Dialog */}
       <Dialog open={isCreateDialogOpen} onOpenChange={setIsCreateDialogOpen}>
-        <DialogContent>
+        <DialogContent className="max-w-3xl">
           <DialogHeader>
             <DialogTitle>Create New Project</DialogTitle>
             <DialogDescription>
-              Add a new project to organize your artifacts and collaborate with your
-              team
+              Start from scratch or use a template to get started quickly
             </DialogDescription>
           </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="name">Project Name</Label>
-              <Input
-                id="name"
-                placeholder="E-commerce Platform"
-                value={newProject.name}
-                onChange={(e) =>
-                  setNewProject({ ...newProject, name: e.target.value })
-                }
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Description (Optional)</Label>
-              <Textarea
-                id="description"
-                placeholder="Full-stack e-commerce solution with payment integration"
-                value={newProject.description}
-                onChange={(e) =>
-                  setNewProject({ ...newProject, description: e.target.value })
-                }
-                rows={3}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="status">Status</Label>
-              <Select
-                value={newProject.status}
-                onValueChange={(value: any) =>
-                  setNewProject({ ...newProject, status: value })
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">Active</SelectItem>
-                  <SelectItem value="archived">Archived</SelectItem>
-                  <SelectItem value="completed">Completed</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
+
+          <Tabs value={createMode} onValueChange={(v: any) => setCreateMode(v)}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="blank">Start from Scratch</TabsTrigger>
+              <TabsTrigger value="template">
+                <Sparkles className="mr-2 h-4 w-4" />
+                Use Template
+              </TabsTrigger>
+            </TabsList>
+
+            {/* Blank Project Tab */}
+            <TabsContent value="blank" className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="name">Project Name</Label>
+                <Input
+                  id="name"
+                  placeholder="My Awesome Project"
+                  value={newProject.name}
+                  onChange={(e) =>
+                    setNewProject({ ...newProject, name: e.target.value })
+                  }
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Description (Optional)</Label>
+                <Textarea
+                  id="description"
+                  placeholder="Brief description of your project"
+                  value={newProject.description}
+                  onChange={(e) =>
+                    setNewProject({ ...newProject, description: e.target.value })
+                  }
+                  rows={3}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="status">Status</Label>
+                <Select
+                  value={newProject.status}
+                  onValueChange={(value: any) =>
+                    setNewProject({ ...newProject, status: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="active">Active</SelectItem>
+                    <SelectItem value="archived">Archived</SelectItem>
+                    <SelectItem value="completed">Completed</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </TabsContent>
+
+            {/* Template Tab */}
+            <TabsContent value="template" className="space-y-4">
+              <div className="space-y-2">
+                <Label>Choose a Template</Label>
+                <div className="grid max-h-96 grid-cols-2 gap-3 overflow-y-auto rounded-lg border p-3">
+                  {PROJECT_TEMPLATES.map((template) => (
+                    <button
+                      key={template.id}
+                      onClick={() => {
+                        setSelectedTemplate(template);
+                        setNewProject({
+                          name: template.name,
+                          description: template.description,
+                          status: "active",
+                        });
+                      }}
+                      className={cn(
+                        "flex flex-col gap-2 rounded-lg border-2 p-3 text-left transition-all hover:border-primary-300 hover:bg-primary-50",
+                        selectedTemplate?.id === template.id
+                          ? "border-primary-500 bg-primary-50"
+                          : "border-neutral-200 bg-white"
+                      )}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="text-2xl">{template.icon}</span>
+                        <div className="min-w-0 flex-1">
+                          <h4 className="truncate text-sm font-semibold text-neutral-900">
+                            {template.name}
+                          </h4>
+                          <p className="text-xs text-neutral-500">
+                            {template.category}
+                          </p>
+                        </div>
+                      </div>
+                      <p className="line-clamp-2 text-xs text-neutral-600">
+                        {template.description}
+                      </p>
+                      {template.defaultArtifacts.length > 0 && (
+                        <div className="flex items-center gap-1 text-xs text-neutral-500">
+                          <FileText className="h-3 w-3" />
+                          <span>{template.defaultArtifacts.length} artifacts included</span>
+                        </div>
+                      )}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {selectedTemplate && (
+                <>
+                  <div className="space-y-2">
+                    <Label htmlFor="template-name">Project Name</Label>
+                    <Input
+                      id="template-name"
+                      placeholder={selectedTemplate.name}
+                      value={newProject.name}
+                      onChange={(e) =>
+                        setNewProject({ ...newProject, name: e.target.value })
+                      }
+                    />
+                    <p className="text-xs text-neutral-500">
+                      Leave blank to use template name
+                    </p>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="template-description">Description (Optional)</Label>
+                    <Textarea
+                      id="template-description"
+                      placeholder={selectedTemplate.description}
+                      value={newProject.description}
+                      onChange={(e) =>
+                        setNewProject({ ...newProject, description: e.target.value })
+                      }
+                      rows={2}
+                    />
+                    <p className="text-xs text-neutral-500">
+                      Leave blank to use template description
+                    </p>
+                  </div>
+                  <div className="rounded-lg bg-primary-50 p-3 text-sm">
+                    <p className="font-medium text-primary-900">What's included:</p>
+                    <ul className="mt-2 space-y-1 text-xs text-primary-800">
+                      {selectedTemplate.defaultArtifacts.map((artifact, idx) => (
+                        <li key={idx}>• {artifact.title}</li>
+                      ))}
+                      {selectedTemplate.defaultArtifacts.length === 0 && (
+                        <li>• No default artifacts (blank project)</li>
+                      )}
+                    </ul>
+                  </div>
+                </>
+              )}
+            </TabsContent>
+          </Tabs>
+
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setIsCreateDialogOpen(false)}
-              disabled={createProject.isPending}
+              onClick={() => {
+                setIsCreateDialogOpen(false);
+                setSelectedTemplate(null);
+                setCreateMode("blank");
+                setNewProject({ name: "", description: "", status: "active" });
+              }}
+              disabled={isCreating}
             >
               Cancel
             </Button>
             <Button
               onClick={handleCreateProject}
-              disabled={createProject.isPending}
+              disabled={isCreating || (createMode === "template" && !selectedTemplate)}
             >
-              {createProject.isPending ? (
+              {isCreating ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creating...
                 </>
               ) : (
-                "Create Project"
+                <>
+                  {createMode === "template" && <Sparkles className="mr-2 h-4 w-4" />}
+                  Create Project
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Import Project Dialog */}
+      <Dialog open={isImportDialogOpen} onOpenChange={setIsImportDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Import Project</DialogTitle>
+            <DialogDescription>
+              Import a project from a previously exported JSON file
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="import-file">Select Export File</Label>
+              <Input
+                id="import-file"
+                type="file"
+                accept=".json,application/json"
+                onChange={(e) => setImportFile(e.target.files?.[0] || null)}
+              />
+              <p className="text-xs text-neutral-500">
+                Choose a .json file exported from FlowForge
+              </p>
+            </div>
+            {importFile && (
+              <div className="rounded-lg bg-primary-50 p-3 text-sm">
+                <p className="font-medium text-primary-900">Selected file:</p>
+                <p className="mt-1 text-xs text-primary-800">{importFile.name}</p>
+                <p className="mt-1 text-xs text-primary-700">
+                  Size: {(importFile.size / 1024).toFixed(2)} KB
+                </p>
+              </div>
+            )}
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setIsImportDialogOpen(false);
+                setImportFile(null);
+              }}
+              disabled={importProject.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleImportProject}
+              disabled={importProject.isPending || !importFile}
+            >
+              {importProject.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Importing...
+                </>
+              ) : (
+                <>
+                  <Upload className="mr-2 h-4 w-4" />
+                  Import Project
+                </>
               )}
             </Button>
           </DialogFooter>

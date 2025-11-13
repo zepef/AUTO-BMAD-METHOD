@@ -223,6 +223,156 @@ As a business owner, I want to create an account with email and password so that
 
   console.log(`✓ Created artifact: User Authentication Story`);
 
+  // Create additional projects
+  const project2 = await prisma.project.create({
+    data: {
+      name: "Mobile App Redesign",
+      description: "Complete UX overhaul for iOS and Android applications",
+      status: "active",
+      userId: user.id,
+    },
+  });
+
+  const project3 = await prisma.project.create({
+    data: {
+      name: "API Gateway Service",
+      description: "Microservices architecture with API gateway pattern",
+      status: "completed",
+      userId: user.id,
+    },
+  });
+
+  console.log(`✓ Created additional projects`);
+
+  // Create chat sessions
+  const chatSession1 = await prisma.chatSession.create({
+    data: {
+      title: "Product Requirements Discussion",
+      userId: user.id,
+      projectId: project.id,
+    },
+  });
+
+  const chatSession2 = await prisma.chatSession.create({
+    data: {
+      title: "Architecture Review and Planning",
+      userId: user.id,
+      projectId: project.id,
+    },
+  });
+
+  const chatSession3 = await prisma.chatSession.create({
+    data: {
+      title: "Mobile App Design Brainstorming",
+      userId: user.id,
+      projectId: project2.id,
+    },
+  });
+
+  console.log(`✓ Created chat sessions`);
+
+  // Create messages for chat session 1
+  await prisma.message.createMany({
+    data: [
+      {
+        role: "user",
+        content: "I need help defining the requirements for an e-commerce platform. Where should we start?",
+        userId: user.id,
+        sessionId: chatSession1.id,
+      },
+      {
+        role: "assistant",
+        content: "Great! Let's start by understanding your target audience and business goals. An e-commerce platform typically serves two main user types: business owners (who manage products and orders) and customers (who browse and purchase). What's your primary business objective?",
+        userId: user.id,
+        sessionId: chatSession1.id,
+        agentId: "pm",
+      },
+      {
+        role: "user",
+        content: "We want to help small businesses get online quickly without technical knowledge. The main goal is to onboard 100 businesses in the first 6 months.",
+        userId: user.id,
+        sessionId: chatSession1.id,
+      },
+      {
+        role: "assistant",
+        content: "Perfect! That's a clear objective. For small businesses with limited technical knowledge, we should focus on: 1) Quick setup process (< 30 minutes to launch), 2) Pre-built templates, 3) Simple product management, 4) Integrated payment processing. Let me help you structure this into a comprehensive PRD with user stories, requirements, and success metrics.",
+        userId: user.id,
+        sessionId: chatSession1.id,
+        agentId: "pm",
+      },
+    ],
+  });
+
+  // Create messages for chat session 2
+  await prisma.message.createMany({
+    data: [
+      {
+        role: "user",
+        content: "What architecture pattern would you recommend for an e-commerce platform that needs to handle 10,000 concurrent users?",
+        userId: user.id,
+        sessionId: chatSession2.id,
+      },
+      {
+        role: "assistant",
+        content: "For that scale, I'd recommend a microservices architecture. Here's why: 1) Scalability: Each service can scale independently based on demand, 2) Fault isolation: If one service fails, others continue working, 3) Technology flexibility: Use the best tool for each service. For e-commerce, I'd suggest these core services: Catalog Service, Cart Service, Checkout Service, and User Service.",
+        userId: user.id,
+        sessionId: chatSession2.id,
+        agentId: "architect",
+      },
+      {
+        role: "user",
+        content: "That makes sense. What about the technology stack?",
+        userId: user.id,
+        sessionId: chatSession2.id,
+      },
+      {
+        role: "assistant",
+        content: "I'd recommend: Frontend: Next.js 14 with React and TypeScript for SEO and performance. Backend: Node.js with Express for API services. Database: PostgreSQL for transactional data, Redis for caching. Message Queue: RabbitMQ for async processing. Infrastructure: AWS with ECS for container orchestration. This stack provides excellent performance, scalability, and developer experience.",
+        userId: user.id,
+        sessionId: chatSession2.id,
+        agentId: "architect",
+      },
+    ],
+  });
+
+  console.log(`✓ Created chat messages`);
+
+  // Create additional artifacts for other projects
+  await prisma.artifact.create({
+    data: {
+      type: "document",
+      title: "Mobile App User Research",
+      description: "User interview findings and insights",
+      status: "completed",
+      userId: user.id,
+      projectId: project2.id,
+      content: `# Mobile App User Research
+
+## Research Goals
+Understand pain points in the current mobile experience and identify opportunities for improvement.
+
+## Methodology
+- 15 user interviews
+- 100 survey responses
+- App analytics review
+
+## Key Findings
+1. Navigation is confusing (73% of users struggled)
+2. Search functionality is hard to find
+3. Users want dark mode
+4. Performance issues on older devices
+
+## Recommendations
+- Redesign navigation with bottom tabs
+- Add prominent search bar
+- Implement dark mode
+- Optimize images and reduce bundle size
+`,
+    },
+  });
+
+  console.log(`✓ Created additional artifacts`);
+
   // Create agent configs
   const agentConfigs = [
     { agentId: "pm", model: "gpt-4-turbo-preview", temperature: 0.7 },
