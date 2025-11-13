@@ -209,9 +209,16 @@ export function ArtifactsPanel() {
                           </p>
 
                           <div className="mt-2 flex items-center justify-between">
-                            <span className="text-xs text-neutral-500">
-                              {formatDistanceToNow(new Date(artifact.updatedAt), { addSuffix: true })}
-                            </span>
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-neutral-500">
+                                {formatDistanceToNow(new Date(artifact.updatedAt), { addSuffix: true })}
+                              </span>
+                              {artifact.projectId && (
+                                <Badge variant="secondary" className="text-[10px] px-1">
+                                  Project
+                                </Badge>
+                              )}
+                            </div>
                             <div className="flex gap-1 opacity-0 transition-opacity group-hover:opacity-100">
                               <Button
                                 variant="ghost"

@@ -35,6 +35,7 @@ const updateArtifactSchema = z.object({
   content: z.string().optional(),
   status: artifactStatusSchema.optional(),
   type: artifactTypeSchema.optional(),
+  projectId: z.string().optional().nullable(),
 });
 
 export const artifactRouter = createTRPCRouter({

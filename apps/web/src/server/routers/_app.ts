@@ -6,11 +6,12 @@
 
 import { createTRPCRouter } from "../trpc";
 import { artifactRouter } from "./artifact";
+import { projectRouter } from "./project";
 
 export const appRouter = createTRPCRouter({
   artifact: artifactRouter,
+  project: projectRouter,
   // Add more routers here as needed:
-  // project: projectRouter,
   // message: messageRouter,
   // user: userRouter,
 });

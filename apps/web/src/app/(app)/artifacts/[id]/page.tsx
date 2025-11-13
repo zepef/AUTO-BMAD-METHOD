@@ -35,8 +35,14 @@ export default function ArtifactEditorPage() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState<ArtifactStatus>("draft");
+  const [projectId, setProjectId] = useState<string | undefined>(undefined);
   const [content, setContent] = useState("");
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
+
+  // Fetch projects for the selector
+  const { data: projectsData } = trpc.project.list.useQuery({
+    limit: 100,
+  });
 
   // Sync form state with fetched data
   useEffect(() => {
@@ -44,6 +50,7 @@ export default function ArtifactEditorPage() {
       setTitle(artifact.title);
       setDescription(artifact.description || "");
       setStatus(artifact.status as ArtifactStatus);
+      setProjectId(artifact.projectId || undefined);
       setContent(artifact.content);
     }
   }, [artifact]);
@@ -80,6 +87,7 @@ export default function ArtifactEditorPage() {
       title,
       description,
       status,
+      projectId: projectId || null,
       content: newContent,
     });
   };
@@ -181,6 +189,26 @@ export default function ArtifactEditorPage() {
               <SelectItem value="draft">Draft</SelectItem>
               <SelectItem value="in-progress">In Progress</SelectItem>
               <SelectItem value="completed">Completed</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <Select
+            value={projectId || "none"}
+            onValueChange={(v) => {
+              setProjectId(v === "none" ? undefined : v);
+              setHasUnsavedChanges(true);
+            }}
+          >
+            <SelectTrigger className="w-48">
+              <SelectValue placeholder="No project" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">No project</SelectItem>
+              {projectsData?.projects.map((project: any) => (
+                <SelectItem key={project.id} value={project.id}>
+                  {project.name}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
