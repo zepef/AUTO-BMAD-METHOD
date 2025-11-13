@@ -6,6 +6,13 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Plus,
   MessageSquare,
   Search,
@@ -13,6 +20,7 @@ import {
   Edit2,
   Folder,
   Loader2,
+  Filter,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
@@ -30,12 +38,19 @@ export function ChatHistorySidebar({
   onNewSession,
 }: ChatHistorySidebarProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [projectFilter, setProjectFilter] = useState<string>("all");
   const [editingSessionId, setEditingSessionId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const utils = trpc.useUtils();
 
+  // Fetch projects for filter
+  const { data: projectsData } = trpc.project.list.useQuery({
+    limit: 100,
+  });
+
   // Fetch chat sessions
   const { data, isLoading, error } = trpc.chat.listSessions.useQuery({
+    projectId: projectFilter === "all" ? undefined : projectFilter === "none" ? undefined : projectFilter,
     limit: 100,
   });
 
@@ -105,8 +120,25 @@ export function ChatHistorySidebar({
         </Button>
       </div>
 
-      {/* Search */}
-      <div className="p-4">
+      {/* Filter and Search */}
+      <div className="space-y-3 p-4">
+        <Select value={projectFilter} onValueChange={setProjectFilter}>
+          <SelectTrigger className="w-full">
+            <div className="flex items-center gap-2">
+              <Filter className="h-4 w-4" />
+              <SelectValue placeholder="All projects" />
+            </div>
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All projects</SelectItem>
+            <SelectItem value="none">No project</SelectItem>
+            {projectsData?.projects.map((project: any) => (
+              <SelectItem key={project.id} value={project.id}>
+                {project.name}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-neutral-400" />
           <Input

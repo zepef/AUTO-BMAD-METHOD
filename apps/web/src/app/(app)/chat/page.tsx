@@ -6,7 +6,26 @@ import { AgentSelector } from "@/components/chat/agent-selector";
 import { ChatHistorySidebar } from "@/components/chat/chat-history-sidebar";
 import { type Message, type Agent } from "@/types/chat";
 import { trpc } from "@/lib/trpc/client";
-import { Loader2 } from "lucide-react";
+import { Loader2, Folder, Sparkles } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 const AGENTS: Agent[] = [
   {
@@ -46,9 +65,20 @@ export default function ChatPage() {
   const [input, setInput] = useState("");
   const [isStreamingLoading, setIsStreamingLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isArtifactDialogOpen, setIsArtifactDialogOpen] = useState(false);
+  const [newArtifact, setNewArtifact] = useState({
+    type: "document" as "prd" | "architecture" | "story" | "epic" | "tech-spec" | "document",
+    title: "",
+    description: "",
+  });
 
   const utils = trpc.useUtils();
   const selectedAgent = AGENTS.find((a) => a.id === selectedAgentId);
+
+  // Fetch projects for selector
+  const { data: projectsData } = trpc.project.list.useQuery({
+    limit: 100,
+  });
 
   // Fetch current session data
   const { data: sessionData, isLoading: isLoadingSession } =
@@ -77,6 +107,30 @@ export default function ChatPage() {
     },
     onError: (error) => {
       console.error("Error saving message:", error);
+    },
+  });
+
+  // Update session mutation
+  const updateSession = trpc.chat.updateSession.useMutation({
+    onSuccess: () => {
+      utils.chat.getSession.invalidate({ id: currentSessionId! });
+      utils.chat.listSessions.invalidate();
+    },
+    onError: (error) => {
+      console.error("Error updating session:", error);
+    },
+  });
+
+  // Create artifact mutation
+  const createArtifact = trpc.artifact.create.useMutation({
+    onSuccess: (newArtifactData) => {
+      utils.artifact.list.invalidate();
+      setIsArtifactDialogOpen(false);
+      setNewArtifact({ type: "document", title: "", description: "" });
+      router.push(`/artifacts/${newArtifactData.id}`);
+    },
+    onError: (error) => {
+      alert(`Error creating artifact: ${error.message}`);
     },
   });
 
@@ -117,6 +171,45 @@ export default function ChatPage() {
     setCurrentSessionId(sessionId);
     setInput("");
     setError(null);
+  };
+
+  const handleProjectChange = (projectId: string) => {
+    if (!currentSessionId) return;
+    updateSession.mutate({
+      id: currentSessionId,
+      projectId: projectId === "none" ? null : projectId,
+    });
+  };
+
+  const handleGenerateArtifact = () => {
+    if (!newArtifact.title.trim()) {
+      alert("Please enter an artifact title");
+      return;
+    }
+
+    // Generate content from chat messages
+    const conversationSummary = messages
+      .filter((m) => m.content.trim().length > 0)
+      .map((m) => `**${m.role === "user" ? "User" : m.agentName || "Assistant"}:** ${m.content}`)
+      .join("\n\n");
+
+    const content = `# ${newArtifact.title}
+
+${newArtifact.description ? `${newArtifact.description}\n\n` : ""}## Conversation Summary
+
+${conversationSummary || "No conversation yet."}
+
+---
+
+*This artifact was generated from a chat conversation.*
+`;
+
+    createArtifact.mutate({
+      ...newArtifact,
+      content,
+      projectId: sessionData?.projectId || undefined,
+      status: "draft",
+    });
   };
 
   const handleSendMessage = async (content: string) => {
@@ -279,10 +372,18 @@ export default function ChatPage() {
         {/* Chat Header */}
         <div className="border-b border-neutral-200 px-6 py-4">
           <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-lg font-semibold text-neutral-900">
-                {sessionData?.title || "AI Chat Workspace"}
-              </h2>
+            <div className="flex-1">
+              <div className="flex items-center gap-3">
+                <h2 className="text-lg font-semibold text-neutral-900">
+                  {sessionData?.title || "AI Chat Workspace"}
+                </h2>
+                {sessionData?.project && (
+                  <Badge variant="secondary" className="gap-1">
+                    <Folder className="h-3 w-3" />
+                    {sessionData.project.name}
+                  </Badge>
+                )}
+              </div>
               <p className="text-sm text-neutral-600">
                 {error ? (
                   <span className="text-error">{error}</span>
@@ -291,11 +392,39 @@ export default function ChatPage() {
                 )}
               </p>
             </div>
-            <AgentSelector
-              agents={AGENTS}
-              selectedAgentId={selectedAgentId}
-              onSelectAgent={setSelectedAgentId}
-            />
+            <div className="flex items-center gap-3">
+              <Button
+                variant="outline"
+                className="gap-2"
+                onClick={() => setIsArtifactDialogOpen(true)}
+                disabled={messages.length === 0}
+              >
+                <Sparkles className="h-4 w-4" />
+                Generate Artifact
+              </Button>
+              <Select
+                value={sessionData?.projectId || "none"}
+                onValueChange={handleProjectChange}
+                disabled={!currentSessionId}
+              >
+                <SelectTrigger className="w-48">
+                  <SelectValue placeholder="No project" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="none">No project</SelectItem>
+                  {projectsData?.projects.map((project: any) => (
+                    <SelectItem key={project.id} value={project.id}>
+                      {project.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              <AgentSelector
+                agents={AGENTS}
+                selectedAgentId={selectedAgentId}
+                onSelectAgent={setSelectedAgentId}
+              />
+            </div>
           </div>
         </div>
 
@@ -318,6 +447,99 @@ export default function ChatPage() {
           )}
         </div>
       </div>
+
+      {/* Generate Artifact Dialog */}
+      <Dialog open={isArtifactDialogOpen} onOpenChange={setIsArtifactDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Generate Artifact from Chat</DialogTitle>
+            <DialogDescription>
+              Create a new artifact using the conversation from this chat session
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <Label htmlFor="artifact-type">Type</Label>
+              <Select
+                value={newArtifact.type}
+                onValueChange={(value: any) =>
+                  setNewArtifact({ ...newArtifact, type: value })
+                }
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="prd">PRD (Product Requirements)</SelectItem>
+                  <SelectItem value="architecture">Architecture</SelectItem>
+                  <SelectItem value="story">User Story</SelectItem>
+                  <SelectItem value="epic">Epic</SelectItem>
+                  <SelectItem value="tech-spec">Technical Specification</SelectItem>
+                  <SelectItem value="document">Document</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="artifact-title">Title</Label>
+              <Input
+                id="artifact-title"
+                placeholder="My Artifact"
+                value={newArtifact.title}
+                onChange={(e) =>
+                  setNewArtifact({ ...newArtifact, title: e.target.value })
+                }
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="artifact-description">Description (Optional)</Label>
+              <Textarea
+                id="artifact-description"
+                placeholder="Brief description of this artifact"
+                value={newArtifact.description}
+                onChange={(e) =>
+                  setNewArtifact({ ...newArtifact, description: e.target.value })
+                }
+                rows={3}
+              />
+            </div>
+            <div className="rounded-lg bg-neutral-50 p-3 text-sm text-neutral-600">
+              <p className="font-medium">What will be included:</p>
+              <ul className="mt-2 space-y-1 text-xs">
+                <li>• Full conversation history ({messages.length} messages)</li>
+                <li>• Formatted with user and agent labels</li>
+                {sessionData?.project && (
+                  <li>• Linked to project: {sessionData.project.name}</li>
+                )}
+              </ul>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              variant="outline"
+              onClick={() => setIsArtifactDialogOpen(false)}
+              disabled={createArtifact.isPending}
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={handleGenerateArtifact}
+              disabled={createArtifact.isPending}
+            >
+              {createArtifact.isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Creating...
+                </>
+              ) : (
+                <>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Generate Artifact
+                </>
+              )}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
