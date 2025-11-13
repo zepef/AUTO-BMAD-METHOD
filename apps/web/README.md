@@ -52,15 +52,24 @@ Create a `.env` file in the `apps/web` directory with the following variables:
 # Database
 DATABASE_URL="file:./dev.db"
 
-# OpenAI API Configuration
-OPENAI_API_KEY="your-openai-api-key-here"
-OPENAI_MODEL="gpt-4-turbo-preview"
+# Anthropic API Configuration (Claude)
+ANTHROPIC_API_KEY="your-anthropic-api-key-here"
+DEFAULT_AI_PROVIDER="anthropic"
 
 # Application URL (for development)
 NEXT_PUBLIC_APP_URL="http://localhost:3000"
 ```
 
-**Important**: Replace `your-openai-api-key-here` with your actual OpenAI API key. Get one at [platform.openai.com](https://platform.openai.com).
+**Important**: Replace `your-anthropic-api-key-here` with your actual Anthropic API key. Get one at [console.anthropic.com](https://console.anthropic.com).
+
+**Default Model**: Claude 3.5 Haiku (fast, cost-effective, latest version)
+
+**Optional - Use OpenAI instead**:
+
+```env
+OPENAI_API_KEY="your-openai-api-key-here"
+DEFAULT_AI_PROVIDER="openai"
+```
 
 ### 3. Database Setup
 
@@ -228,13 +237,22 @@ npm run db:push
 npm run db:seed
 ```
 
-### OpenAI API Errors
+### AI API Errors
 
 **Problem**: Chat responses failing
 
+**For Anthropic (default)**:
+
+- Check your `.env` file has a valid `ANTHROPIC_API_KEY`
+- Verify your Anthropic account has credits available
+- Get your API key at [console.anthropic.com](https://console.anthropic.com)
+- Default model: `claude-3-5-haiku-20241022`
+
+**For OpenAI (if using)**:
+
 - Check your `.env` file has a valid `OPENAI_API_KEY`
 - Verify your OpenAI account has credits available
-- Check the model name is correct (`gpt-4-turbo-preview`)
+- Set `DEFAULT_AI_PROVIDER="openai"` in `.env`
 
 ### Port Already in Use
 
@@ -288,8 +306,8 @@ Required for production:
 
 ```env
 DATABASE_URL="postgresql://user:password@host:5432/database"
-OPENAI_API_KEY="sk-..."
-OPENAI_MODEL="gpt-4-turbo-preview"
+ANTHROPIC_API_KEY="sk-ant-..."
+DEFAULT_AI_PROVIDER="anthropic"
 NEXT_PUBLIC_APP_URL="https://your-domain.com"
 NODE_ENV="production"
 ```

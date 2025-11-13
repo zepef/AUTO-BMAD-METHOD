@@ -14,7 +14,7 @@ export async function POST(req: Request) {
     }
 
     // Get API key based on provider
-    const selectedProvider = (provider || process.env.DEFAULT_AI_PROVIDER || "openai") as AIProvider;
+    const selectedProvider = (provider || process.env.DEFAULT_AI_PROVIDER || "anthropic") as AIProvider;
     let apiKey: string | undefined;
 
     switch (selectedProvider) {

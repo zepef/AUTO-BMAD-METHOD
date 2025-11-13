@@ -17,6 +17,8 @@ export const PROVIDER_MODELS = {
     "gpt-3.5-turbo": "gpt-3.5-turbo",
   },
   anthropic: {
+    "claude-3.5-sonnet": "claude-3-5-sonnet-20241022",
+    "claude-3.5-haiku": "claude-3-5-haiku-20241022",
     "claude-3-opus": "claude-3-opus-20240229",
     "claude-3-sonnet": "claude-3-sonnet-20240229",
     "claude-3-haiku": "claude-3-haiku-20240307",
@@ -45,8 +47,8 @@ export function getDefaultModel(provider: AIProvider): string {
     case "openai":
       return "gpt-4-turbo-preview";
     case "anthropic":
-      return "claude-3-sonnet-20240229";
+      return "claude-3-5-haiku-20241022";
     default:
-      return "gpt-4-turbo-preview";
+      return "claude-3-5-haiku-20241022";
   }
 }
