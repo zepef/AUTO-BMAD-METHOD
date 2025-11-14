@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { ChatContainer } from "@/components/chat/chat-container";
 import { AgentSelector } from "@/components/chat/agent-selector";
 import { ChatHistorySidebar } from "@/components/chat/chat-history-sidebar";
@@ -15,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -59,6 +61,7 @@ const AGENTS: Agent[] = [
 ];
 
 export default function ChatPage() {
+  const router = useRouter();
   const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [selectedAgentId, setSelectedAgentId] = useState("pm");
   const [messages, setMessages] = useState<Message[]>([]);
